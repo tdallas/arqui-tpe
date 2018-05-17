@@ -1,16 +1,9 @@
-# Prerequisites
-*.d
-
 # Object files
 *.o
 *.ko
 *.obj
 *.elf
 
-# Linker output
-*.ilk
-*.map
-*.exp
 
 # Precompiled Headers
 *.gch
@@ -35,18 +28,17 @@
 *.i*86
 *.x86_64
 *.hex
+*.bin
 
 # Debug files
 *.dSYM/
 *.su
-*.idb
-*.pdb
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+#Binary Files
+*.bin
+*.sys
+
+#The images
+Image/*.img
+Image/*.qcow2
+Image/*.vmdk
