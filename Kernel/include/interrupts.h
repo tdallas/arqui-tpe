@@ -1,4 +1,4 @@
- /*
+/*
  *   interrupts.h
  *
  *  Created on: Apr 18, 2010
@@ -13,7 +13,7 @@
 void _irq00Handler(void);
 void _irq01Handler(void);
 
-void systemCallHandler(void);
+void _systemCallHandler(void);
 
 void _exception0Handler(void);
 void _exception1Handler(void);

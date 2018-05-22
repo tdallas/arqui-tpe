@@ -10,8 +10,7 @@ unsigned long int rand_next = 1;
  *      this is compatible with the System V function rand(), not
  *      with the bsd function rand() that returns 0..(2**31)-1.
  */
-int 
-rand ()
+int rand()
 {
 	rand_next = rand_next * 1103515245 + 12345;
 	return ((unsigned int)(rand_next / 65536) % 32768);
@@ -21,8 +20,7 @@ rand ()
  *  srand(seed)
  *      companion routine to rand(). Initializes the seed.
  */
-void
-srand(unsigned int seed)
+void srand(unsigned int seed)
 {
 	rand_next = seed;
 }

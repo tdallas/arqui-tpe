@@ -3,7 +3,7 @@ GLOBAL get_time_RTC
 GLOBAL key_pressed
 GLOBAL get_key
 
-section .text
+SECTION .text
 
 cpuVendor:
 	push rbp

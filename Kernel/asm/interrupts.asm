@@ -11,7 +11,7 @@ GLOBAL _irq01Handler
 GLOBAL _exception0Handler
 GLOBAL _exception1Handler
 
-GLOBAL systemCallHandler
+GLOBAL _systemCallHandler
 
 EXTERN systemCallDispatcher
 EXTERN irqDispatcher
@@ -109,7 +109,7 @@ picSlaveMask:
     pop     rbp
     retn
 
-;8254 Timer (Timer Tick)
+;Timer (Timer Tick)
 _irq00Handler:
 	irqHandlerMaster 0
 
@@ -125,7 +125,8 @@ _exception0Handler:
 _exception1Handler:
 	exceptionHandler 1
 
-systemCallHandler:
+;System Calls
+_systemCallHandler:
     pushState
 
     call systemCallDispatcher
