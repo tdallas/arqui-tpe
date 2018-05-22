@@ -1,21 +1,59 @@
 GLOBAL _cli
 GLOBAL _sti
+GLOBAL _hlt
 GLOBAL picMasterMask
 GLOBAL picSlaveMask
 GLOBAL haltcpu
-GLOBAL _hlt
 
 GLOBAL _irq00Handler
 GLOBAL _irq01Handler
 
 GLOBAL _exception0Handler
+GLOBAL _exception1Handler
 
+GLOBAL systemCallHandler
+
+EXTERN systemCallDispatcher
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 
 SECTION .text
 
-%include "./asm/macros.m"
+%macro pushState 0
+	push rax
+	push rbx
+	push rcx
+	push rdx
+	push rbp
+	push rdi
+	push rsi
+	push r8
+	push r9
+	push r10
+	push r11
+	push r12
+	push r13
+	push r14
+	push r15
+%endmacro
+
+%macro popState 0
+	pop r15
+	pop r14
+	pop r13
+	pop r12
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rsi
+	pop rdi
+	pop rbp
+	pop rdx
+	pop rcx
+	pop rbx
+	pop rax
+%endmacro
 
 %macro irqHandlerMaster 1
 	pushState
@@ -82,6 +120,21 @@ _irq01Handler:
 ;Zero Division Exception
 _exception0Handler:
 	exceptionHandler 0
+
+;Invalid Code Exception
+_exception1Handler:
+	exceptionHandler 1
+
+systemCallHandler:
+    pushState
+
+    call systemCallDispatcher
+    
+	mov [aux], rax
+	popState
+    mov rax, [aux]
+    
+	iretq
 
 haltcpu:
 	cli
