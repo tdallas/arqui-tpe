@@ -1,5 +1,5 @@
-#ifndef IDT_LOADER
-#define IDT_LOADER
+#ifndef IDTLOADER_H
+#define IDTLOADER_H
 
 #include <stdint.h>
 
