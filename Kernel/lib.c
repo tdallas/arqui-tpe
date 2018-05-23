@@ -2,11 +2,11 @@
 
 static int8_t *mem = 0x20000000000;
 
-void *malloc(int32_t size)
+void *malloc(int64_t size)
 {
 	for (int i = 0; i < size; i++)
 	{
-		mem[x] = 0;
+		mem[i] = 0;
 	}
 	void *result = mem;
 	mem += size + 1;
