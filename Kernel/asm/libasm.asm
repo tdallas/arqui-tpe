@@ -3,16 +3,13 @@ GLOBAL get_time_RTC
 GLOBAL key_pressed
 GLOBAL get_key
 GLOBAL os_speaker_beep
-GLOBAL os_speaker_tone
-GLOBAL os_speaker_off
-GLOBAL inf_loop
+
 
 SECTION .text
 
 cpuVendor:
 	push rbp
 	mov rbp, rsp
-	call os_speaker_beep
 	push rbx
 
 	mov rax, 0
@@ -128,19 +125,31 @@ os_speaker_beep:
 	mov ax, 0x0C80
 	call os_speaker_tone
 	mov ax, 2		; A quarter of a second
-	call inf_loop
+	call os_delay
 	call os_speaker_off
 
 	pop rcx
 	pop rax
 	ret
+; -----------------------------------------------------------------------------
+; os_delay -- Delay by X eights of a second
+; IN:	RAX = Time in eights of a second
+; OUT:	All registers preserved
+; A value of 8 in RAX will delay 1 second and a value of 1 will delay 1/8 of a second
+; This function depends on the RTC (IRQ 8) so interrupts must be enabled.
+os_delay:
+	push rcx
+	push rax
 
-inf_loop:
-	push rbx
-	mov rbx, 200
-	
-	.loop:
-	cmp rbx, 0
-	jnz .loop
+	mov rcx, [os_ClockCounter]	; Grab the initial timer counter. It increments 8 times a second
+	add rax, rcx			; Add RCX so we get the end time we want
+os_delay_loop:
+	cmp qword [os_ClockCounter], rax	; Compare it against our end time
+	jle os_delay_loop		; Loop if RAX is still lower
 
-	pop rbx
+	pop rax
+	pop rcx
+	ret
+; -----------------------------------------------------------------------------
+os_SystemVariables:	equ 0x0000000000110000	; 65536 bytes	0x110000 -> 0x11FFFF - Location of System Variables
+os_ClockCounter:	equ os_SystemVariables + 0x10

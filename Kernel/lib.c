@@ -1,5 +1,18 @@
 #include <stdint.h>
 
+static int8_t *mem = 0x20000000000;
+
+void *malloc(int32_t size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		mem[x] = 0;
+	}
+	void *result = mem;
+	mem += size + 1;
+	return result;
+}
+
 void *memset(void *destination, int32_t c, uint64_t length)
 {
 	uint8_t chr = (uint8_t)c;
