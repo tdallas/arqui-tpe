@@ -106,6 +106,8 @@ int main()
 	ncNewline();
 
 	ncPrint("[Finished]");
-
+	seconds_delay(2);
+	ncClear();
+	beep();
 	return 0;
 }
