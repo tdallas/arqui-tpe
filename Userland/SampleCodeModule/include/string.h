@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 int strcmp(char *str1, char *str2);
-void * memcpy(void *, void *, size_t);
+void * memcpy(void *, void *, long unsigned int size);
 int strlen(char *str);
 
 #endif
