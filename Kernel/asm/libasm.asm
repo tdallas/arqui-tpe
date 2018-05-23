@@ -2,8 +2,17 @@ GLOBAL cpuVendor
 GLOBAL get_time_RTC
 GLOBAL key_pressed
 GLOBAL get_key
+GLOBAL beep
 
 SECTION .text
+
+beep:
+	push rbp
+  	mov rbp, rsp
+
+	mov rsp, rbp
+  	pop rbp
+	ret
 
 cpuVendor:
 	push rbp

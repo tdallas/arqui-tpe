@@ -79,6 +79,7 @@ void *initializeKernelBinary()
 
 int main()
 {
+	beep();
 	ncPrint("[IDT Loader]");
 	ncNewline();
 	load_idt(); //Carga instrucciones
