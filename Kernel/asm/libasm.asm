@@ -61,7 +61,7 @@ get_key:
   	ret
 
 ; -----------------------------------------------------------------------------
-; os_speaker_beep -- Create a standard OS beep
+; beep -- Create a standard OS beep
 ; IN:	Nothing
 ; OUT:	All registers preserved
 beep:

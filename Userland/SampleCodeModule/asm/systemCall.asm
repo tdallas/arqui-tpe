@@ -11,4 +11,4 @@ systemCall:
   
   mov rsp, rbp
   pop rbp
-  iretq
+  ret

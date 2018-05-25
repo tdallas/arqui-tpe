@@ -39,7 +39,7 @@ const char shiftKeyMap[128] =
         '(', ')', '_', '+', '\b', '\t', 'Q', 'W', 'E', 'R',             /* 19 */
         'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n', 0,                /* 29   - Control */
         'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':',               /* 39 */
-        '\'', '`', 0, /*leftshift*/ '\\', 'Z', 'X', 'C', 'V', 'B', 'N', /* 49 */
+        '\"', '`', 0, /*leftshift*/ '|', 'Z', 'X', 'C', 'V', 'B', 'N', /* 49 */
         'M', '<', '>', '?', 0, /*rightshift*/ '*',                      /*55*/
         0,                                                              /* Alt -56*/
         ' ',                                                            /* Space bar -57*/
@@ -80,26 +80,23 @@ static int print = 1;
 
 void keyboard_handler()
 {
-  unsigned char keycode;
-  keycode = get_key();
-  unsigned char scancode;
-  /* Read from the keyboard's data buffer */
-  scancode = get_key();
+  unsigned char keyCode;
+  keyCode = get_key();
 
   /* If the top bit of the byte we read from the keyboard is
     *  set, that means that a key has just been released */
-  if (scancode & 0x80)
+  if (keyCode & 0x80)
   {
 
-    if (scancode == 182 || scancode == 170)
+    if (keyCode == 182 || keyCode == 170)
     {
       shiftKey = 0;
     }
-    if (scancode == 157)
+    if (keyCode == 157)
     {
       controlKey = 0;
     }
-    if (scancode == 184)
+    if (keyCode == 184)
     {
       altKey = 0;
     }
@@ -111,33 +108,33 @@ void keyboard_handler()
           *  interrupts. */
 
     /* Just to show you how this works, we simply translate
-          *  the keyboard scancode into an ASCII value, and then
+          *  the keyboard keyCode into an ASCII value, and then
           *  display it to the screen. You can get creative and
           *  use some flags to see if a shift is pressed and use a
           *  different layout, or you can add another 128 entries
           *  to the above layout to correspond to 'shift' being
           *  held. If shift is held using the larger lookup table,
-          *  you would add 128 to the scancode when you look for it */
-    if (scancode == 58)
+          *  you would add 128 to the keyCode when you look for it */
+    if (keyCode == 58)
     { //CAPSLOCK
       capsKey = !capsKey;
     }
-    if (scancode == 54 || scancode == 42)
+    if (keyCode == 54 || keyCode == 42)
     { //shift
       shiftKey = 1;
       print = 0;
     }
-    if (scancode == 29)
+    if (keyCode == 29)
     { //control
       controlKey = 1;
       print = 0;
     }
-    if (scancode == 56)
+    if (keyCode == 56)
     { //alt
       altKey = 1;
       print = 0;
     }
-    char c = keyMap[scancode];
+    char c = keyMap[keyCode];
     if ('a' <= c && c <= 'z' && ((shiftKey == 1 && capsKey == 0) || (shiftKey == 0 && capsKey == 1)))
     {
       c -= ('a' - 'A');
@@ -146,7 +143,7 @@ void keyboard_handler()
     {
       if (shiftKey == 1)
       {
-        c = shiftKeyMap[scancode];
+        c = shiftKeyMap[keyCode];
       }
     }
     if (print == 1)

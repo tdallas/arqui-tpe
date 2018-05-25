@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include <string.h>
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
@@ -92,22 +91,28 @@ int main()
 	ncNewline();
 	ncPrint("  Sample code module at 0x");
 	ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	ncNewline();
-	ncPrint("  Calling the sample code module returned: ");
-	ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
-	ncNewline();
+	//ncNewline();
+	//ncPrint("  Calling the sample code module returned: ");
+	//ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
+	//ncNewline();
 	ncNewline();
 
 	ncPrint("  Sample data module at 0x");
 	ncPrintHex((uint64_t)sampleDataModuleAddress);
-	ncNewline();
-	ncPrint("  Sample data module contents: ");
-	ncPrint((char *)sampleDataModuleAddress);
+	//ncNewline();
+	//ncPrint("  Sample data module contents: ");
+	//ncPrint((char *)sampleDataModuleAddress);
 	ncNewline();
 
 	ncPrint("[Finished]");
+	ncNewline();
+	ncNewline();
+	ncPrint("System booting in 2 seconds.");
 	seconds_delay(2);
 	ncClear();
 	beep();
+
+	((EntryPoint)sampleCodeModuleAddress)();
+
 	return 0;
 }
