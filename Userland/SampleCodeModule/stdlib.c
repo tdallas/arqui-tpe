@@ -1,5 +1,6 @@
 //COMPLETAR .h CON CADA FUNCION
 #include <stdlib.h>
+#include <string.h>
 
 #define IS_DIGIT(character) ((character - '0') >= 0 && (character - '0') <= 9)
 
