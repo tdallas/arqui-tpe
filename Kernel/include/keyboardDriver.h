@@ -3,7 +3,6 @@
 
 #define BUFFER_SIZE 80
 #define EOF 0
-#define IS_ALPHA(C) ((C >= 'a' && C <= 'z') ? 1 : 0)
 
 extern int getKeyCode();
 int getChar();

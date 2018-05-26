@@ -1,5 +1,7 @@
 #include <keyboardDriver.h>
 
+#define IS_ALPHA(C) ((C >= 'a' && C <= 'z') ? 1 : 0)
+
 static const char keyMap[128] =
     {
         0, 27, '1', '2', '3', '4', '5', '6', '7', '8',                  /* 9 */

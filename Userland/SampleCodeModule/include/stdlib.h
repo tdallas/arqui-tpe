@@ -5,5 +5,9 @@
 
 int rand();
 void srand(unsigned int seed);
+int isDigit(char c);
+int isAlpha(char c);
+int stringIsAlpha(char *s);
+int stringisNum(char *string);
 
 #endif
