@@ -1,7 +1,8 @@
 //COMPLETAR .h CON CADA FUNCION
 #include <stdlib.h>
 
-#define IS_DIGIT(character) ((character - '0') >= 0 && (character - '0') <= 9)
+#define IS_ALPHA(C) (((C >= 'a' && C <= 'z') || (C >= 'A' && C <= 'Z')) ? 1 : 0)
+#define IS_DIGIT(C) ((C - '0') >= 0 && (C - '0') <= 9)
 
 unsigned long int rand_next = 1;
 
@@ -27,14 +28,32 @@ void srand(unsigned int seed)
 	rand_next = seed;
 }
 
-int isAlpha(char *c) {
-	return IS_DIGIT(*c) ? 0 : 1;
+int isDigit(char c)
+{
+	return IS_DIGIT(c) ? 1 : 0;
+}
+
+int isAlpha(char c)
+{
+	return IS_ALPHA(c);
+}
+
+int stringIsAlpha(char *s)
+{
+	while (*s != 0)
+	{
+		if (!isAlpha(*s))
+		{
+			return 0;
+		}
+	}
+	return 1;
 }
 
 // Parameters: Char pointer
 // Return values: 2 if float, 1 if int, 0 if not num
 //fixme estaria bueno hacer un refactor
-int isDigit(char *string)
+int stringisNum(char *string)
 {
 
 	int isFloat = 0;
@@ -52,15 +71,16 @@ int isDigit(char *string)
 
 	while (*string != '\0')
 	{
-		int dotRead = 0;		
+		int dotRead = 0;
 		if (!IS_DIGIT(*string))
 		{
-			if (*string == '.'){
+			if (*string == '.')
+			{
 				if (dotRead > 0)
 					return 0;
 				isFloat++;
 				dotRead++;
-				string++;				
+				string++;
 			}
 			else
 			{
