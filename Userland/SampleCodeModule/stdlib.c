@@ -110,11 +110,11 @@ char *intToString(int num)
 {
 	int digits = countDigits(num);
 	char *result = malloc(digits + 1);
-	int result = 0;
 
 	for (int i = 0; i < digits; i++)
 	{
-		result += ((num%10)*pow(10,i));
+		*result = ((num%10)*pow(10,i)) + '0';
+		result++;
 		num /= 10;
 	}
 	return result;

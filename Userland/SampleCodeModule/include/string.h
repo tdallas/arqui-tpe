@@ -4,6 +4,6 @@
 
 int strcmp(char *str1, char *str2);
 void * memcpy(void *destination, const void *source, long unsigned int length);
-size_t strlen(const char *str);
+long unsigned int strlen(const char *str);
 
 #endif

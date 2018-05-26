@@ -1,9 +1,9 @@
 //Completar .h
 #include <string.h>
 
-size_t strlen(const char *str) {
+long unsigned int strlen(const char *str) {
     int count = 0;
-    while (*str != null || *str != '\0') {
+    while (*str != '\0') {
         count++;
     }
     return count;
