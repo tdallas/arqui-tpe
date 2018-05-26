@@ -1,15 +1,12 @@
 #ifndef KEYBOARD_DRIVER_H
 #define KEYBOARD_DRIVER_H
 
-#define BUFFERSIZE 64
+#define BUFFERSIZE 80
 #define EOF 0
+#define ISALPHA(C) ((C >= 'a' && C <= 'z') ? 1 : 0)
 
-extern int key_pressed();
 extern int get_key();
-void getChar(char *ch);
-void readAllBuffer(char *);
-int isEmpty();
-void putChar(char c);
+int getChar();
 void keyboard_handler();
 
 #endif

@@ -3,8 +3,8 @@
 
 #define EOF 0
 
-char getChar();
-
-void putChar(char c);
+int getchar();
+void putchar(char c);
+void *malloc(long unsigned int size);
 
 #endif

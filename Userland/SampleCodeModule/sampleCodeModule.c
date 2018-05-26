@@ -6,8 +6,8 @@ int main()
 {
 	char c;
 	while(1){
-		if((c = getChar()) != EOF){
-			putChar(c);
+		if((c = getchar()) != EOF){
+			putchar(c);
 		}
 	}
 
