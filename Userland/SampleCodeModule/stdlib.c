@@ -1,6 +1,7 @@
 //COMPLETAR .h CON CADA FUNCION
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #define IS_ALPHA(C) (((C >= 'a' && C <= 'z') || (C >= 'A' && C <= 'Z')) ? 1 : 0)
 #define IS_DIGIT(C) ((C - '0') >= 0 && (C - '0') <= 9)
@@ -37,6 +38,17 @@ int isDigit(char c)
 int isAlpha(char c)
 {
 	return IS_ALPHA(c);
+}
+
+int countDigits(int num)
+{
+	int count = 0;
+	while (num != 0)
+	{
+		num /= 10;
+		count++;
+	}
+	return count;
 }
 
 int stringIsAlpha(char *s)
@@ -92,4 +104,29 @@ int stringisNum(char *string)
 	}
 
 	return 1 + isFloat;
+}
+
+char *intToString(int num)
+{
+	int digits = countDigits(num);
+	char *result = malloc(digits + 1);
+	int result = 0;
+
+	for (int i = 0; i < digits; i++)
+	{
+		result += ((num%10)*pow(10,i));
+		num /= 10;
+	}
+	return result;
+}
+
+int pow(int num, int exp)
+{
+	int result = 1;
+	while (exp != 0)
+	{
+		result *= num;
+		exp--;
+	}
+	return result;
 }
