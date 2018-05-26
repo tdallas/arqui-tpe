@@ -8,6 +8,7 @@ int main()
 	while(1){
 		if((c = getchar()) != EOF){
 			putchar(c);
+			printf("hola");
 		}
 	}
 

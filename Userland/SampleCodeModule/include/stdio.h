@@ -6,5 +6,6 @@
 int getchar();
 void putchar(char c);
 void *malloc(long unsigned int size);
+void printf(const char *str,...);
 
 #endif
