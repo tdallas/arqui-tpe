@@ -1,13 +1,13 @@
 #include <keyboardDriver.h>
 
-const char keyMap[128] =
+static const char keyMap[128] =
     {
         0, 27, '1', '2', '3', '4', '5', '6', '7', '8',                  /* 9 */
         '9', '0', '-', '=', '\b', '\t', 'q', 'w', 'e', 'r',             /* 19 */
         't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n', 0,                /* 29   - Control */
         'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',               /* 39 */
-        '\'', '`', 0, /*leftshift*/ '\\', 'z', 'x', 'c', 'v', 'b', 'n', /* 49 */
-        'm', ',', '.', '/', 0, /*rightshift*/ '*',                      /*55*/
+        '\'', '`', 0, /*Left Shift*/ '\\', 'z', 'x', 'c', 'v', 'b', 'n',/* 49 */
+        'm', ',', '.', '/', 0, /*Right Shift*/ '*',                     /*55*/
         0,                                                              /* Alt -56*/
         ' ',                                                            /* Space bar -57*/
         0,                                                              /* Caps lock -58*/
@@ -15,32 +15,32 @@ const char keyMap[128] =
         0,                                                              /* Num lock -68*/
         0,                                                              /* Scroll Lock -69*/
         0,                                                              /* Home key -70*/
-        15,                                                             /* Up Arrow -71*/
+        17,                                                             /* Up Arrow -71*/
         0,                                                              /* Page Up -72*/
-        '-',                                                            /* minus -73*/
-        13,                                                             /* Left Arrow */
+        '-',                                                            /* Minus -73*/
+        18,                                                             /* Left Arrow */
         0,
-        12, /* Right Arrow */
-        '+',
-        0,  /* 79 - End key*/
-        14, /* Down Arrow */
-        14, /* Page Down */
-        0,  /* Insert Key */
-        0,  /* Delete Key */
+        20,                                                             /* Right Arrow */
+        '+',                                                            /* Plus -78*/
+        0,                                                              /* 79 - End key*/
+        19,                                                             /* Down Arrow */
+        0,                                                              /* Page Down */
+        0,                                                              /* Insert Key */
+        0,                                                              /* Delete Key */
         0, 0, 0,
-        0, /* F11 Key */
-        0, /* F12 Key */
-        0, /* All other keys are undefined */
+        0,                                                              /* F11 Key */
+        0,                                                              /* F12 Key */
+        0,                                                              /* All other keys are undefined */
 };
 
-const char shiftKeyMap[128] =
+static const char shiftKeyMap[128] =
     {
         0, 27, '!', '@', '#', '$', '%', '^', '&', '*',                 /* 9 */
         '(', ')', '_', '+', '\b', '\t', 'Q', 'W', 'E', 'R',            /* 19 */
         'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n', 0,               /* 29   - Control */
         'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':',              /* 39 */
-        '\"', '~', 0, /*leftshift*/ '|', 'Z', 'X', 'C', 'V', 'B', 'N', /* 49 */
-        'M', '<', '>', '?', 0, /*rightshift*/ '*',                     /*55*/
+        '\"', '~', 0, /*Left Shift*/ '|', 'Z', 'X', 'C', 'V', 'B', 'N',/* 49 */
+        'M', '<', '>', '?', 0, /*Right Shift*/ '*',                    /*55*/
         0,                                                             /* Alt -56*/
         ' ',                                                           /* Space bar -57*/
         0,                                                             /* Caps lock -58*/
@@ -48,39 +48,38 @@ const char shiftKeyMap[128] =
         0,                                                             /* Num lock -68*/
         0,                                                             /* Scroll Lock -69*/
         0,                                                             /* Home key -70*/
-        15,                                                            /* Up Arrow -71*/
+        17,                                                            /* Up Arrow -71*/
         0,                                                             /* Page Up -72*/
-        '-',                                                           /* minus -73*/
-        13,                                                            /* Left Arrow */
+        '-',                                                           /* Minus -73*/
+        18,                                                            /* Left Arrow */
         0,
-        12, /* Right Arrow */
-        '+',
-        0,  /* 79 - End key*/
-        14, /* Down Arrow */
-        14, /* Page Down */
-        0,  /* Insert Key */
-        0,  /* Delete Key */
+        20,                                                            /* Right Arrow */
+        '+',                                                           /* Plus -78*/
+        0,                                                             /* 79 - End key*/
+        19,                                                            /* Down Arrow */
+        0,                                                             /* Page Down */
+        0,                                                             /* Insert Key */
+        0,                                                             /* Delete Key */
         0, 0, 0,
-        0, /* F11 Key */
-        0, /* F12 Key */
-        0, /* All other keys are undefined */
+        0,                                                             /* F11 Key */
+        0,                                                             /* F12 Key */
+        0,                                                             /* All other keys are undefined */
 };
 
-static char buffer[BUFFERSIZE] = {0};
+static int buffer[BUFFER_SIZE] = {0};
 static int readIndex = 0;
 static int writeIndex = 0;
 static int elements = 0;
+
 static int shiftKey = 0;
 static int altKey = 0;
 static int controlKey = 0;
 static int capsKey = 0;
-static int printFlag = 1;
 
 void keyboard_handler()
 {
-  printFlag = 1;
   unsigned char keyCode;
-  keyCode = get_key();
+  keyCode = getKeyCode();
 
   if (keyCode & 0x80)
   {
@@ -102,50 +101,45 @@ void keyboard_handler()
     if (keyCode == 58)
     {
       capsKey = !capsKey;
-      printFlag = 0;
     }
     else if (keyCode == 54 || keyCode == 42)
     {
       shiftKey = 1;
-      printFlag = 0;
     }
     else if (keyCode == 29)
     {
       controlKey = 1;
-      printFlag = 0;
     }
     else if (keyCode == 56)
     {
       altKey = 1;
-      printFlag = 0;
     }
-
-    if (printFlag)
+    char c = keyMap[keyCode];
+    if (c != 0)
     {
-      char c = keyMap[keyCode];
       if (shiftKey)
       {
-        if (!ISALPHA(c) || !capsKey)
+        if (!IS_ALPHA(c) || !capsKey)
         {
           c = shiftKeyMap[keyCode];
         }
       }
       else
       {
-        if (ISALPHA(c) && capsKey)
+        if (IS_ALPHA(c) && capsKey)
         {
           c = shiftKeyMap[keyCode];
         }
       }
       buffer[writeIndex] = c;
-      writeIndex = (writeIndex + 1) % BUFFERSIZE;
-      if (elements < BUFFERSIZE)
+      writeIndex = (writeIndex + 1) % BUFFER_SIZE;
+      if (elements < BUFFER_SIZE)
       {
         elements++;
       }
       else
       {
-        readIndex = (readIndex + 1) % BUFFERSIZE;
+        readIndex = (readIndex + 1) % BUFFER_SIZE;
       }
     }
   }
@@ -159,7 +153,7 @@ int getChar()
   }
   int c;
   c = buffer[readIndex];
-  readIndex = (readIndex + 1) % BUFFERSIZE;
+  readIndex = (readIndex + 1) % BUFFER_SIZE;
   elements--;
   return c;
 }

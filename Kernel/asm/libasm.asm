@@ -1,12 +1,18 @@
 GLOBAL cpuVendor
-GLOBAL get_time_RTC
-GLOBAL get_key
-GLOBAL beep
+GLOBAL getTimeRTC
+GLOBAL getKeyCode
+GLOBAL speakerBeep
+GLOBAL speakerOn
+GLOBAL speakerOff
 
 EXTERN ticks_delay
 
 SECTION .text
 
+; -----------------------------------------------------------------------------
+; cpuVendor -- Writes information of the cpu on the buffer
+; IN:	RDI = pointer to buffer
+; OUT:	RAX = pointer of the buffer with the information
 cpuVendor:
 	push rbp
 	mov rbp, rsp
@@ -29,8 +35,14 @@ cpuVendor:
 	mov rsp, rbp
 	pop rbp
 	ret
+; -----------------------------------------------------------------------------
 
-get_time_RTC:
+; -----------------------------------------------------------------------------
+; getTimeRTC -- Gets the corresponding actual unit of time requested
+; IN:	RDI = 0 for seconds, 2 for minutes, 4 for hours, 6 for weekday, 
+; 		7 for days, 8 for months, 9 for years
+; OUT:	RAX = corresponding unit of time requested
+getTimeRTC:
 	push rbp
   	mov rbp, rsp
 
@@ -48,8 +60,13 @@ get_time_RTC:
   	mov rsp, rbp
   	pop rbp
   	ret
+; -----------------------------------------------------------------------------
 
-get_key:
+; -----------------------------------------------------------------------------
+; getKeyCode -- Gets the key code of the key pressed
+; IN:	Nothing
+; OUT:	RAX = key code
+getKeyCode:
   	push rbp
   	mov rbp, rsp
 
@@ -64,23 +81,22 @@ get_key:
   	mov rsp, rbp
   	pop rbp
   	ret
+; -----------------------------------------------------------------------------
 
 ; -----------------------------------------------------------------------------
-; beep -- Create a standard OS beep
-; IN:	Nothing
+; speakerOn -- Generate a tone on the PC speaker
+; IN:	RDI = note frequency
 ; OUT:	All registers preserved
-beep:
+; Note:	Call speakerOff to stop the tone
+speakerOn:
 	push rbp
   	mov rbp, rsp
-
+	
 	push rax
-	push rcx
 
-	xor ecx, ecx
-	mov cx, 0x0C80		; Store note value for now
 	mov al, 182
-	out 0x43, al		; System timers..
-	mov ax, cx		; Set up frequency
+	out 0x43, al	; System timers..
+	mov ax, di		; Set up frequency
 	out 0x42, al
 	mov al, ah		; 64-bit mode.... AH allowed????
 	out 0x42, al
@@ -88,14 +104,54 @@ beep:
 	or al, 0x03
 	out 0x61, al
 
+	pop rax
+
+	mov rsp, rbp
+  	pop rbp
+	ret
+; -----------------------------------------------------------------------------
+
+; -----------------------------------------------------------------------------
+; speakerOff -- Turn off PC speaker
+; IN:	Nothing
+; OUT:	All registers preserved
+speakerOff:
+	push rbp
+  	mov rbp, rsp
+	
+	push rax
+
+	in al, 0x61		; Switch PC speaker off
+	and al, 0xFC
+	out 0x61, al
+
+	pop rax
+
+	mov rsp, rbp
+  	pop rbp
+	ret
+; -----------------------------------------------------------------------------
+
+; -----------------------------------------------------------------------------
+; speakerBeep -- Create a standard OS beep
+; IN:	Nothing
+; OUT:	All registers preserved
+speakerBeep:
+	push rbp
+  	mov rbp, rsp
+	
+	push rax
+	push rcx
+
+	mov rax, 0x0000000000000C80
+	call speakerOn
+
 	push rdi
 	mov rdi, 4		; A quarter of a second delay
 	call ticks_delay
 	pop rdi
 
-	in al, 0x61		; Switch PC speaker off
-	and al, 0xFC
-	out 0x61, al
+	call speakerOff
 
 	pop rcx
 	pop rax
@@ -103,3 +159,4 @@ beep:
 	mov rsp, rbp
   	pop rbp
 	ret
+; -----------------------------------------------------------------------------

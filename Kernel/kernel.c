@@ -80,8 +80,11 @@ int main()
 {
 	ncPrint("[IDT Loader]");
 	ncNewline();
+
+	ncPrint("  Loading instructions...");
 	load_idt(); //Carga instrucciones
-	ncPrint("	Instructions loaded correctly.");
+	ncPrint("  Done.");
+	
 	ncNewline();
 	ncPrint("[Finished]");
 	ncNewline();
@@ -91,26 +94,20 @@ int main()
 	ncNewline();
 	ncPrint("  Sample code module at 0x");
 	ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	//ncNewline();
-	//ncPrint("  Calling the sample code module returned: ");
-	//ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
-	//ncNewline();
 	ncNewline();
 
 	ncPrint("  Sample data module at 0x");
 	ncPrintHex((uint64_t)sampleDataModuleAddress);
-	//ncNewline();
-	//ncPrint("  Sample data module contents: ");
-	//ncPrint((char *)sampleDataModuleAddress);
 	ncNewline();
 
 	ncPrint("[Finished]");
 	ncNewline();
 	ncNewline();
-	ncPrint("System booting in 2 seconds.");
+
+	ncPrint("System booting in 2 seconds...");
 	seconds_delay(2);
 	ncClear();
-	beep();
+	speakerBeep();
 
 	((EntryPoint)sampleCodeModuleAddress)();
 

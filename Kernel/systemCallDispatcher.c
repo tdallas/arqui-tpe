@@ -19,7 +19,7 @@ uint64_t systemCallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t
 
 static uint64_t getTime(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
-	return get_time_RTC(rsi);
+	return getTimeRTC(rsi);
 }
 
 static uint64_t read(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
@@ -34,7 +34,7 @@ static uint64_t write(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uin
 
 static uint64_t beepSound(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
-	beep();
+	speakerBeep();
 }
 
 static uint64_t memalloc(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
