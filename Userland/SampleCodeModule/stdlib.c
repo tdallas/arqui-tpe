@@ -27,46 +27,47 @@ void srand(unsigned int seed)
 	rand_next = seed;
 }
 
-int isChar(char *c) {
+int isAlpha(char *c) {
 	return IS_DIGIT(*c) ? 0 : 1;
 }
 
 // Parameters: Char pointer
 // Return values: 2 if float, 1 if int, 0 if not num
 //fixme estaria bueno hacer un refactor
-int isNum(char *string)
+int isDigit(char *string)
 {
 
 	int isFloat = 0;
 	//Check wether it could by negative number
 	if (*string == '-')
 	{
-		s++;
+		string++;
 	}
 
 	if (!IS_DIGIT(*string))
 	{
 		return 0;
 	}
-	s++;
+	string++;
 
 	while (*string != '\0')
 	{
-		int decimal_marks = 0;		
+		int dotRead = 0;		
 		if (!IS_DIGIT(*string))
 		{
-			if (*string == '.')
+			if (*string == '.'){
+				if (dotRead > 0)
+					return 0;
 				isFloat++;
-			if (*string == '.' && decimal_marks == 0 && IS_DIGIT(*(string + 1)))
-			{
-				decimal_marks++;
+				dotRead++;
+				string++;				
 			}
 			else
 			{
 				return 0;
 			}
 		}
-		s++;
+		string++;
 	}
 
 	return 1 + isFloat;
