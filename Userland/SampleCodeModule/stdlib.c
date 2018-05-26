@@ -106,18 +106,44 @@ int stringisNum(char *string)
 	return 1 + isFloat;
 }
 
-char *intToString(int num)
-{
-	int digits = countDigits(num);
-	char *result = malloc(digits + 1);
+// char *intToString(int num)
+// {
+// 	int digits = countDigits(num);
+// 	char *result = malloc(digits + 1);
+// 	int i = 0;
+// 	while (num != 0)
+// 	{
+// 		*result = ((num % 10) * pow(10, i)) + '0';
+// 		result++;
+// 		i++;
+// 		num /= 10;
+// 	}
+// 	return result;
+// }
 
-	for (int i = 0; i < digits; i++)
-	{
-		*result = ((num%10)*pow(10,i)) + '0';
-		result++;
-		num /= 10;
-	}
-	return result;
+void intostr(int num,char * ret){
+	int dig=0;
+	char aux;
+	if(num!=0){
+		if(num<0){
+			num=-num;
+			ret[0]='-';
+			dig++;
+		}
+		while(num!=0){
+			ret[dig]=(num%10)+'0';
+			num=num/10;
+			dig++;
+		}
+		for(int x=0;x<dig/2;x++){
+			aux=ret[x];
+			ret[x]=ret[dig-x-1];
+			ret[dig-x-1]=aux;
+		}
+		ret[dig]=0;
+	}else{
+		ret[0]='0';
+	}	
 }
 
 int pow(int num, int exp)
