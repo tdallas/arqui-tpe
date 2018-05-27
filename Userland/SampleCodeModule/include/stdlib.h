@@ -9,6 +9,9 @@
 
 int rand();
 void srand(unsigned int seed);
+char toLower(char c);
+char toUpper(char c);
+int isSpace(char c);
 int isDigit(char c);
 int isAlpha(char c);
 int stringIsAlpha(char *s);

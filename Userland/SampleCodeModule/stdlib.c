@@ -26,6 +26,24 @@ void srand(unsigned int seed)
 	rand_next = seed;
 }
 
+char toLower(char c){
+	if(c>='A' && c<='Z'){
+		return 'a' + c - 'A';
+	}
+	return c;
+}
+char toUpper(char c){
+	if(c>='a' && c<='z'){
+		return 'A' + c - 'a';
+	}
+	return c;
+}
+
+int isSpace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n');
+}
+
 int isDigit(char c)
 {
 	return IS_DIGIT(c);
@@ -140,7 +158,7 @@ void inToString(int num, char *ret)
 		}
 		if (flagNegative)
 		{
-			char *auxRet = ret+1;
+			char *auxRet = ret + 1;
 			dig--;
 			for (int x = 0; x < dig / 2; x++)
 			{
