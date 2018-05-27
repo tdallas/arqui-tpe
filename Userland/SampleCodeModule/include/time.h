@@ -1,12 +1,12 @@
 #ifndef TIME_H
 #define TIME_H
 
+#include <stdio.h>
+
 long int time(void *value);
-int getMin(void);
-int getSeconds(void);
-int getHour(void);
-int getMonth(void);
-int getDay(void);
-int getYear(void);
+void getAllTimes(int times[7]);
+int getTimeUTC();
+void setTimeUTC(int newUTC);
+void printTime();
 
 #endif
