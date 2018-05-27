@@ -16,8 +16,8 @@ void putchar(char c);
 void *malloc(long unsigned int size);
 void free(void *pointer);
 void printf(const char *str,...);
-int sscanf(char *str, const char *format, ...);
-int scanf(const char* format,...);
-char* readLine();
+int sscanf(char *line, char *fmt, ...);
+int scanf(char* fmt,...);
+void readLine(char *buff);
 
 #endif

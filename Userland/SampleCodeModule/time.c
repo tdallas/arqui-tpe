@@ -136,10 +136,8 @@ void getAllTimesForUTC(int times[7], int actualUTC)
 
 long int time(long int *t)
 {
-    int times[7];
+    int times[7] ={getSecond(), getMinute(), getHour(), getWeekDay(), getDay(), getMonth(), getYear()};
     long int result = 0;
-
-    getAllTimesForUTC(times, 0);
 
     result += times[0];                //Add actual seconds
     result += times[1] * 60;           //Add seconds of minute
@@ -148,6 +146,7 @@ long int time(long int *t)
 
     int year = times[6];
     int month = times[5];
+    
     result += monthsDays[month-1] * 24 * 60 * 60; //Add seconds of month without leaps
     if ((year % 4) == 0 && month > 2)           //if year is leap and we are past febrary adds one day in seconds
     {

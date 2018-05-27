@@ -7,11 +7,16 @@ int main()
 	char c;
 	printf("Epoch Time: %d. ", time(NULL));
 	printTime();
-	/*char string[10];
-	scanf("string=%s", string);
-	printf(", el string es:%s", string);*/
+	putchar('\n');
+	int num[1];
 	while(1){
-		if((c = getchar()) != EOF){
+		scanf("%d", num);
+		printf(", el num es:%d", num[0]);
+		putchar('\n');
+	}
+	while(1){
+		if ((c = getchar()) != EOF)
+		{
 			putchar(c);
 		}
 	}
