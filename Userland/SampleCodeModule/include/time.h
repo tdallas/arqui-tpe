@@ -2,6 +2,7 @@
 #define TIME_H
 
 #include <stdio.h>
+#include <systemCall.h>
 
 long int time();
 void getAllTimes(int times[7]);

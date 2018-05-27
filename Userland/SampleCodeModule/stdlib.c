@@ -1,8 +1,3 @@
-//COMPLETAR .h CON CADA FUNCION
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-
 #define IS_ALPHA(C) ((C >= 'a' && C <= 'z') || (C >= 'A' && C <= 'Z'))
 #define IS_DIGIT(C) (C >= '0' && C <= '9')
 #define IS_NUM(C) ((C - '0') >= 0 && (C - '0') <= 9)
@@ -68,7 +63,7 @@ int stringIsAlpha(char *s)
 // Parameters: Char pointer
 // Return values: 2 if float, 1 if int, 0 if not num
 //fixme estaria bueno hacer un refactor
-int stringisNum(char *string)
+int stringIsNum(char *string)
 {
 
 	int isFloat = 0;
@@ -123,7 +118,7 @@ int stringisNum(char *string)
 // 	return result;
 // }
 
-void intostr(int num, char *ret)
+void inToString(int num, char *ret)
 {
 	int dig = 0;
 	int flagNegative = 0;

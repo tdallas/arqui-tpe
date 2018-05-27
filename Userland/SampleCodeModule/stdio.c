@@ -13,6 +13,9 @@ void putchar(char c)
 
 void *malloc(long unsigned int size)
 {
+    if(size == 0){
+        return NULL;
+    }
     return (void *)systemCall(4, (uint64_t)size, 0, 0, 0, 0);
 }
 
@@ -21,7 +24,6 @@ void free(void *pointer)
     return;
 }
 
-//Useful link: https://www.tutorialspoint.com/cprogramming/c_variable_arguments.htm
 void printf(const char *str, ...)
 {
     char *num = malloc(12);
@@ -43,7 +45,7 @@ void printf(const char *str, ...)
             switch (str[x])
             {
             case 'd':
-                intostr(va_arg(arguments, int), num);
+                inToString(va_arg(arguments, int), num);
                 int index = 0;
                 while (num[index] != 0)
                     putchar(num[index++]);
