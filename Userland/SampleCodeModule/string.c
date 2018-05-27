@@ -1,4 +1,3 @@
-//Completar .h
 #include <string.h>
 
 long unsigned int strlen(const char *str)
@@ -12,7 +11,7 @@ long unsigned int strlen(const char *str)
     return count;
 }
 
-int lowStrCmp(const char *s1, const char *s2)
+int lowstrcmp(const char *s1, const char *s2)
 {
     int i;
     char c1, c2;
@@ -27,6 +26,15 @@ int strcmp(const char *s1, const char *s2)
     int i;
 
     for (i = 0; s1[i] == s2[i]; i++)
+        if (s1[i] == '\0')
+            return 0;
+    return s1[i] - s2[i];
+}
+
+int strncmp(const char *s1, const char *s2, long unsigned int n){
+    int i;
+
+    for (i = 0; s1[i] == s2[i] && i<n; i++)
         if (s1[i] == '\0')
             return 0;
     return s1[i] - s2[i];
@@ -53,4 +61,27 @@ const char *strchr(const char *s, int c)
         }
     }
     return NULL;
+}
+
+char *strncpy(char *destination, const char *source, long unsigned int n){
+    char *aux = destination;
+    int i = 0;
+    while(i < n && *source != '\0'){
+        *destination = *source;
+        destination++;
+        source++;
+        i++;
+    }
+    *destination = '\0';
+    return aux;
+}
+char *strcpy(char *destination, const char *source){
+    char *aux = destination;
+    while(*source != '\0'){
+        *destination = *source;
+        destination++;
+        source++;
+    }
+    *destination = '\0';
+    return aux;
 }

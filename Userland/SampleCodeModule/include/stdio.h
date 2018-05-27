@@ -19,6 +19,5 @@ void printf(const char *str,...);
 int sscanf(char *str, const char *format, ...);
 int scanf(const char* format,...);
 char* readLine();
-char *readInt(char *string, int *num);
 
 #endif

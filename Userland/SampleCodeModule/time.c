@@ -2,9 +2,10 @@
 
 static int UTC = -3;
 
-static const int monthsDays[13] = {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
-static const int lastDayMonths[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static const int monthsDays[12] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+static const int lastDayMonths[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 static const char weekDays[7][10] = {"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
+static const char months[12][11] = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 
 int getSecond()
 {
@@ -90,7 +91,7 @@ void getAllTimesForUTC(int times[7], int actualUTC)
                 year--;
                 month = 12;
             }
-            day = lastDayMonths[month];
+            day = lastDayMonths[month-1];
             if (year % 4 == 0 && month == 2)
             { // Leap Year
                 day = 29;
@@ -107,7 +108,7 @@ void getAllTimesForUTC(int times[7], int actualUTC)
         {
             weekDay = 1;
         }
-        if ((day < lastDayMonths[month]) || (year % 4 == 0 && month == 2 && day < 29)) //Last condition is leap year
+        if ((day < lastDayMonths[month-1]) || (year % 4 == 0 && month == 2 && day < 29)) //Last condition is leap year
         {
             day++;
         }
@@ -147,7 +148,7 @@ long int time(long int *t)
 
     int year = times[6];
     int month = times[5];
-    result += monthsDays[month] * 24 * 60 * 60; //Add seconds of month without leaps
+    result += monthsDays[month-1] * 24 * 60 * 60; //Add seconds of month without leaps
     if ((year % 4) == 0 && month > 2)           //if year is leap and we are past febrary adds one day in seconds
     {
         result += 24 * 60 * 60;

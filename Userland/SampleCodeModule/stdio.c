@@ -120,7 +120,7 @@ int sscanf(char *str, const char *format, ...)
             case 'd':
             case 'i':
                 num = va_arg(args, int *);
-                str = readInt(str, num);
+                str += stringToInt(str, num);
                 n++;
                 break;
             case 'c':
@@ -181,7 +181,7 @@ int scanf(const char *format, ...)
             case 'd':
             case 'i':
                 num = va_arg(args, int *);
-                str = readInt(str, num);
+                str += stringToInt(str, num);
                 n++;
                 break;
             case 'c':
@@ -234,24 +234,4 @@ char *readLine()
     }
     buff[bufferIndex] = '\0';
     return buff;
-}
-
-//Esta funcion esta bien, ya la probe(No es la de nico, la hice yo), lo que hace es guardar el numero que esta en el string en el puntero num.
-char *readInt(char *string, int *num)
-{
-    *num = 0;
-    int sign = 1;
-    if( *string == '+' || *string == '-' )
-    {
-        if( *string == '-' ) sign = -1;
-        string++;
-    }
-    while (isDigit(*string))
-    {
-        (*num) *= 10;
-        (*num) += (int) (*string-'0');
-        string++;
-    }
-    (*num) *= sign;
-    return string;
 }

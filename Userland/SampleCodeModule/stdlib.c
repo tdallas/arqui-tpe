@@ -1,68 +1,63 @@
-#define IS_ALPHA(C) ((C >= 'a' && C <= 'z') || (C >= 'A' && C <= 'Z'))
-#define IS_DIGIT(C) (C >= '0' && C <= '9')
-#define IS_NUM(C) ((C - '0') >= 0 && (C - '0') <= 9)
+#include <stdlib.h>
 
 unsigned long int rand_next = 1;
 
-/*
- *  int rand()
- *      Taken from the K&R C programming language book. Page 46.
- *      returns a pseudo-random integer of 0..32767. Note that
- *      this is compatible with the System V function rand(), not
- *      with the bsd function rand() that returns 0..(2**31)-1.
- */
 int rand()
 {
 	rand_next = rand_next * 1103515245 + 12345;
 	return ((unsigned int)(rand_next / 65536) % 32768);
 }
 
-/*
- *  srand(seed)
- *      companion routine to rand(). Initializes the seed.
- */
 void srand(unsigned int seed)
 {
 	rand_next = seed;
 }
 
-char toLower(char c){
-	if(c>='A' && c<='Z'){
+char toLower(char c)
+{
+	if (c >= 'A' && c <= 'Z')
+	{
 		return 'a' + c - 'A';
 	}
 	return c;
 }
-char toUpper(char c){
-	if(c>='a' && c<='z'){
+char toUpper(char c)
+{
+	if (c >= 'a' && c <= 'z')
+	{
 		return 'A' + c - 'a';
 	}
 	return c;
 }
 
+int isUpper(char c)
+{
+	return (c >= 'A' && c <= 'Z');
+}
+
+int isLower(char c)
+{
+	return (c >= 'a' && c <= 'z');
+}
+
 int isSpace(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\n');
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v');
 }
 
 int isDigit(char c)
 {
-	return IS_DIGIT(c);
+	return (c >= '0' && c <= '9');
 }
 
 int isAlpha(char c)
 {
-	return IS_ALPHA(c);
+	return (isLower(c) || isUpper(c));
 }
 
-int countDigits(int num)
+int isAlphaNum(char c)
 {
-	int count = 0;
-	while (num != 0)
-	{
-		num /= 10;
-		count++;
-	}
-	return count;
+	return (isAlpha(c) || isDigit(c));
 }
 
 int stringIsAlpha(char *s)
@@ -78,29 +73,88 @@ int stringIsAlpha(char *s)
 	return 1;
 }
 
-// Parameters: Char pointer
+void stringToLower(char *s)
+{
+	while (*s != '\0')
+	{
+		if (isUpper(*s))
+		{
+			*s = toLower(*s);
+		}
+		s++;
+	}
+}
+
+void stringToUpper(char *s)
+{
+	while (*s != '\0')
+	{
+		if (isLower(*s))
+		{
+			*s = toUpper(*s);
+		}
+		s++;
+	}
+}
+
+int stringIsDigit(char *s)
+{
+	while (*s != '\0')
+	{
+		if (!isDigit(*s))
+		{
+			return 0;
+		}
+		s++;
+	}
+	return 1;
+}
+
+int stringIsAlphaNum(char *s)
+{
+	while (*s != '\0')
+	{
+		if (!isAlphaNum(*s))
+		{
+			return 0;
+		}
+		s++;
+	}
+	return 1;
+}
+
+int countDigits(int num)
+{
+	int count = 0;
+	while (num != 0)
+	{
+		num /= 10;
+		count++;
+	}
+	return count;
+}
+
 // Return values: 2 if float, 1 if int, 0 if not num
-//fixme estaria bueno hacer un refactor
 int stringIsNum(char *string)
 {
 
 	int isFloat = 0;
-	//Check wether it could by negative number
+
 	if (*string == '-')
 	{
 		string++;
 	}
 
-	if (!IS_NUM(*string))
+	if (!isDigit(*string))
 	{
 		return 0;
 	}
 	string++;
 
-	while (*string != '\0')
+	while (!isSpace(*string) && *string != '\0')
 	{
 		int dotRead = 0;
-		if (!IS_NUM(*string))
+		if (!isDigit(*string))
 		{
 			if (*string == '.')
 			{
@@ -120,21 +174,6 @@ int stringIsNum(char *string)
 
 	return 1 + isFloat;
 }
-
-// char *intToString(int num)
-// {
-// 	int digits = countDigits(num);
-// 	char *result = malloc(digits + 1);
-// 	int i = 0;
-// 	while (num != 0)
-// 	{
-// 		*result = ((num % 10) * pow(10, i)) + '0';
-// 		result++;
-// 		i++;
-// 		num /= 10;
-// 	}
-// 	return result;
-// }
 
 void inToString(int num, char *ret)
 {
@@ -185,6 +224,26 @@ void inToString(int num, char *ret)
 	{
 		ret[0] = '0';
 	}
+}
+
+int stringToInt(char *string, int *num)
+{
+	char *index = string;
+    *num = 0;
+    int sign = 1;
+    if( *string == '+' || *string == '-' )
+    {
+        if( *string == '-' ) sign = -1;
+        string++;
+    }
+    while (isDigit(*string))
+    {
+        (*num) *= 10;
+        (*num) += (int) (*string-'0');
+        string++;
+    }
+    (*num) *= sign;
+    return string - index;
 }
 
 int pow(int num, int exp)
