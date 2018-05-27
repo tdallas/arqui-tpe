@@ -18,8 +18,17 @@ void ncPrint(const char *string)
 
 void ncPrintChar(char character)
 {
-	*currentVideo = character;
-	currentVideo += 2;
+	if(character == '\b'){
+		currentVideo -=2;
+		*currentVideo = ' ';
+	}
+	else if(character == '\n'){
+		ncNewline();
+	}
+	else{
+		*currentVideo = character;
+		currentVideo += 2;
+	}
 }
 
 void ncNewline()
