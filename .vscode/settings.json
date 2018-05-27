@@ -3,6 +3,8 @@
         "time.h": "c",
         "stdint.h": "c",
         "naiveconsole.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stdarg.h": "c",
+        "string.h": "c"
     }
 }

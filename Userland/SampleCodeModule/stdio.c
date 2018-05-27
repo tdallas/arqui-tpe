@@ -1,9 +1,4 @@
-//Completar .h
 #include <stdio.h>
-#include <stdint.h>
-#include <stdarg.h>
-#include <string.h>
-#include <stdlib.h>
 
 int getchar()
 {
@@ -16,10 +11,14 @@ void putchar(char c)
         systemCall(2, (uint64_t)c, 0, 0, 0, 0);
 }
 
-//fixme 
 void *malloc(long unsigned int size)
 {
     return (void *)systemCall(4, (uint64_t)size, 0, 0, 0, 0);
+}
+
+void free(void *pointer)
+{
+    return;
 }
 
 //Useful link: https://www.tutorialspoint.com/cprogramming/c_variable_arguments.htm

@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-long int time(void *value);
+long int time();
 void getAllTimes(int times[7]);
 int getTimeUTC();
 void setTimeUTC(int newUTC);

@@ -30,13 +30,15 @@ static uint64_t read(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint
 static uint64_t write(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
 	ncPrintChar((char)rsi);
+	return 1;
 }
 
 static uint64_t beepSound(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
 	speakerBeep();
+	return 1;
 }
 
 static uint64_t memalloc(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
-	return malloc(rsi);
+	return (uint64_t)malloc(rsi);
 }

@@ -9,5 +9,6 @@ int isDigit(char c);
 int isAlpha(char c);
 int stringIsAlpha(char *s);
 int stringisNum(char *string);
+void intostr(int num, char *ret);
 
 #endif
