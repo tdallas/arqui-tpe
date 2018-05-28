@@ -209,7 +209,7 @@ int scanf(char *fmt, ...)
     return n;
 }
 
-void readLine(char *buff)
+void readLine(char buff[BUFFERSIZE])
 {
     int bufferIndex = 0;
     int c;
@@ -224,7 +224,7 @@ void readLine(char *buff)
                 putchar('\b');
             }
         }
-        else if (c != -1)
+        else if (c != EOF)
         {
             if (bufferIndex <= BUFFERSIZE)
             {
