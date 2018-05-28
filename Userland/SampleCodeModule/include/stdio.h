@@ -1,7 +1,6 @@
 #ifndef STDIO_H
 #define STDIO_H
 
-#include <stdint.h>
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>

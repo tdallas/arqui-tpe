@@ -1,19 +1,19 @@
 #include <stdio.h>
-#include <time.h>
+#include <constantPrints.h>
 #include <stdlib.h>
 
 int main()
 {
 	char c;
-	printf("Epoch Time: %d. ", time(NULL));
+	printf("Epoch Time: %d.\n", time(NULL));
 	printTime();
-	putchar('\n');
+	printDate();
+	printTimeUTC();
 	int num[1];
 	while (1)
 	{
 		scanf("%d", num);
-		printf(", el num es:%d", num[0]);
-		putchar('\n');
+		printf(", el num es:%d.\n", num[0]);
 	}
 	while (1)
 	{

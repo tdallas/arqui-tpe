@@ -4,8 +4,6 @@ static int UTC = -3;
 
 static const int monthsDays[12] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 static const int lastDayMonths[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-static const char weekDays[7][10] = {"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
-static const char months[12][11] = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 
 int getSecond()
 {
@@ -159,7 +157,6 @@ long int time(long int *t)
     result += year * 365 * 24 * 60 * 60; //Adds seconds of year without leaps
 
     if(t != NULL){
-        t = malloc(sizeof(long int));
         *t = result;
     }
     return result;
@@ -178,13 +175,4 @@ int getTimeUTC()
 void setTimeUTC(int newUTC)
 {
     UTC = newUTC;
-}
-
-void printTime()
-{
-    int times[7];
-    getAllTimes(times);
-    printf("Zona horaria: UTC %d. ", UTC);
-    printf("%s %d/%d/%d. ", weekDays[times[3] - 1], times[4], times[5], times[6]);
-    printf("%d:%d:%d.", times[2], times[1], times[0]);
 }
