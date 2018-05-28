@@ -15,9 +15,11 @@ int getchar();
 void putchar(char c);
 void *malloc(long unsigned int size);
 void free(void *pointer);
-void printf(const char *str,...);
-int sscanf(char *line, char *fmt, ...);
-int scanf(char* fmt,...);
+int printf(const char *str, ...);
+int vprintf(const char *str, va_list arguments);
+int sscanf(const char *str, const char *format, ...);
+int scanf(const char *format, ...);
+int vsscanf(const char *str, const char *format, va_list args);
 void readLine(char *buff);
 
 #endif

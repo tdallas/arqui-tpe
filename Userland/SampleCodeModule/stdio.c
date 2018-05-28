@@ -2,6 +2,7 @@
 
 #define BORRA_BUFFER while (getchar() != '\n')
 #define BUFFERSIZE 80
+#define INT_BUFFER_SIZE 12
 
 int abs(int a)
 {
@@ -37,25 +38,26 @@ void free(void *pointer)
     return;
 }
 
-void printf(const char *str, ...)
-{
-    char num[12];
+
+int printf(const char *str, ...){
     va_list arguments;
     va_start(arguments, str);
-    int length = strlen(str);
-    int state = 0;
-    for (int x = 0; x < length; x++)
+    return vprintf(str, arguments);
+}
+
+int vprintf(const char *str, va_list arguments)
+{
+    char num[INT_BUFFER_SIZE];
+    int strIndex = 0;
+    while (str[strIndex] != '\0')
     {
-        if (state == 0)
+        if (str[strIndex] != '%')
         {
-            if (str[x] != '%')
-                putchar(str[x]);
-            else
-                state = 1;
+            putchar(str[strIndex]);
         }
         else
         {
-            switch (str[x])
+            switch (str[++strIndex])
             {
             case 'd':
             case 'i':
@@ -63,149 +65,99 @@ void printf(const char *str, ...)
                 int index = 0;
                 while (num[index] != 0)
                     putchar(num[index++]);
-                state = 0;
                 break;
             case 'c':
                 putchar((char)(va_arg(arguments, int)));
-                state = 0;
                 break;
             case 's':
                 printf(va_arg(arguments, char *));
-                state = 0;
                 break;
             default:
                 putchar('%');
-                putchar(str[x]);
-                state = 0;
+                putchar(str[strIndex]);
                 break;
             }
         }
+        strIndex++;
     }
     va_end(arguments);
+    return strIndex;
 }
 
-int sscanf(char *line, char *fmt, ...)
+int sscanf(const char *str, const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    return vsscanf(str, format, args);
+}
+
+int scanf(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    char buffer[BUFFERSIZE];
+    readLine(buffer);
+    return vsscanf(buffer, format, args);
+}
+
+int vsscanf(const char *str, const char *format, va_list args)
 {
 
-    va_list args;
-    va_start(args, fmt);
-
+    int strIndex = 0;
+    int formatIndex = 0;
     int n = 0;
     char *character;
     int *num;
 
-    while (*fmt != '\0')
+    while (format[formatIndex] != '\0')
     {
-        if (*fmt != '%')
+        if (format[formatIndex] != '%')
         {
-            if ((*fmt) != (*line))
+            if (format[formatIndex] != str[strIndex])
             {
                 return n;
             }
             else
             {
-                fmt++;
-                line++;
+                formatIndex++;
+                strIndex++;
             }
         }
         else
         {
-            switch (*(++fmt))
+            switch (format[++formatIndex])
             {
             case '%':
-                if (*line != '%')
+                if (str[strIndex] != '%')
                     return n;
                 else
-                    line++;
+                    strIndex++;
                 break;
             case 'd':
             case 'i':
                 num = va_arg(args, int *);
-                line += stringToInt(line, num);
+                strIndex += stringToInt(str, num);
                 n++;
                 break;
             case 'c':
                 character = va_arg(args, char *);
-                *character = *line++;
+                *character = str[strIndex++];
                 n++;
                 break;
             case 's':
                 character = va_arg(args, char *);
-                while (!isSpace(*line) && *line != '\0')
+                while (!isSpace(str[strIndex]) && str[strIndex] != '\0')
                 {
-                    *character = *line;
+                    *character = str[strIndex];
                     character++;
-                    line++;
+                    strIndex++;
                 }
                 n++;
             }
-            ++fmt;
+            ++formatIndex;
         }
     }
-    return n;
-}
-
-int scanf(char *fmt, ...)
-{
-    va_list args;
-    va_start(args, fmt);
-
-    int n = 0;
-    char str[BUFFERSIZE];
-    readLine(str);
-    char *line = str;
-    char *character;
-    int *num;
-
-    while (*fmt != '\0')
-    {
-        if (*fmt != '%')
-        {
-            if ((*fmt) != (*line))
-            {
-                return n;
-            }
-            else
-            {
-                fmt++;
-                line++;
-            }
-        }
-        else
-        {
-            switch (*(++fmt))
-            {
-            case '%':
-                if (*line != '%')
-                    return n;
-                else
-                    line++;
-                break;
-            case 'd':
-            case 'i':
-                num = va_arg(args, int *);
-                line += stringToInt(line, num);
-                n++;
-                break;
-            case 'c':
-                character = va_arg(args, char *);
-                *character = *line++;
-                n++;
-                break;
-            case 's':
-                character = va_arg(args, char *);
-                while (!isSpace(*line) && *line != '\0')
-                {
-                    *character = *line;
-                    character++;
-                    line++;
-                }
-                n++;
-            }
-            ++fmt;
-        }
-    }
-
+    va_end(args);
     return n;
 }
 
@@ -236,155 +188,3 @@ void readLine(char buff[BUFFERSIZE])
     buff[bufferIndex] = '\0';
     return;
 }
-
-/*int sscanf(char *line, char* fmt, ...) 
-{ 
-    char *traverse;
-    unsigned int i; 
-
-    char * str; 
-    int * int_ptr;
-
-    int count = 0;
-
-    va_list arg; 
-    va_start(arg, fmt); 
-
-    char * buf = line;
-    char aux[BUFFERSIZE];
-
-    for(traverse = fmt; *traverse != '\0' && *buf != '\0'; traverse++) 
-    { 
-        while( *traverse != '%'){ //Avanzo hasta el %
-            //Si no matchean
-            if(*traverse != *buf){ //Dejo de leer, ya no cumple el formato
-                  va_end(arg);
-                return count; 
-            }
-
-            buf++;
-            traverse++; 
-        } 
-
-        if(*traverse == 0){
-            va_end(arg); 
-            return count; //Termine
-        }
-
-        traverse++; 
-
-        //Module 2: Fetching and executing arguments
-        switch(*traverse) { 
-            case 'i' :
-            case 'd' :
-                        int_ptr = va_arg(arg,int *); //Leo puntero
-
-                        if(*buf != '-' && !isDigit(*buf)){
-                            va_end(arg);
-                            return count;
-                        }
-                      
-
-                        aux[0] = *(buf++); //Copio el primero (digito o '-')
-                        for(i=1; isDigit(*buf) && i < BUFFERSIZE - 1; buf++, i++){ 
-                            //Copio el resto de los digitos
-                            aux[i] = *buf;
-                        }
-                        aux[i] = '\0';
-                        stringToInt(aux, int_ptr);
-                        count++;
-
-                        break; 
-
-            case 's' : str = va_arg(arg, char *);       //Fetch string
-                      strncpy(str, buf, strlen(buf)); //Copio hasta el final en s
-                      count++;
-                      va_end(arg); 
-                      return count;
-                      break; 
-
-        }   
-    } 
-
-    //Cerrando la lista variable
-    va_end(arg); 
-    return count;
-} 
-
-//Scanf con %d, %s
-int scanf(char* fmt, ...) 
-{ 
-    char *traverse;
-    unsigned int i; 
-
-    char * str; 
-    int * int_ptr;
-
-    int count = 0;
-
-    va_list arg; 
-    va_start(arg, fmt); 
-
-    char line[BUFFERSIZE];
-    char * buf = line;
-    char aux[BUFFERSIZE];
-
-    readLine(line);
-
-    for(traverse = fmt; *traverse != '\0' && *buf != '\0'; traverse++) 
-    { 
-        while( *traverse != '%'){ //Avanzo hasta el %
-            //Si no matchean
-            if(*traverse != *buf){ //Dejo de leer, ya no cumple el formato
-                  va_end(arg);
-                return count; 
-            }
-
-            buf++;
-            traverse++; 
-        } 
-
-        if(*traverse == 0){
-            va_end(arg); 
-            return count; //Termine
-        }
-
-        traverse++; 
-
-        //Module 2: Fetching and executing arguments
-        switch(*traverse) { 
-            case 'i' :
-            case 'd' :
-                        int_ptr = va_arg(arg,int *); //Leo puntero
-
-                        if(*buf != '-' && !isDigit(*buf)){
-                            va_end(arg);
-                            return count;
-                        }
-                      
-
-                        aux[0] = *(buf++); //Copio el primero (digito o '-')
-                        for(i=1; isDigit(*buf) && i < BUFFERSIZE - 1; buf++, i++){ 
-                            //Copio el resto de los digitos
-                            aux[i] = *buf;
-                        }
-                        aux[i] = '\0';
-                        stringToInt(aux, int_ptr);
-                        count++;
-
-                        break; 
-
-            case 's' : str = va_arg(arg, char *);       //Fetch string
-                      strncpy(str, buf, strlen(buf)); //Copio hasta el final en s
-                      count++;
-                      va_end(arg); 
-                      return count;
-                      break; 
-
-        }   
-    } 
-
-    //Cerrando la lista variable
-    va_end(arg); 
-    return count;
-}*/

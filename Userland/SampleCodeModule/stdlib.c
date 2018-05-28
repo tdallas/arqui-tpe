@@ -226,24 +226,25 @@ void inToString(int num, char *ret)
 	}
 }
 
-int stringToInt(char *string, int *num)
+int stringToInt(const char *string, int *num)
 {
-	char *index = string;
-    *num = 0;
-    int sign = 1;
-    if( *string == '+' || *string == '-' )
-    {
-        if( *string == '-' ) sign = -1;
-        string++;
-    }
-    while (isDigit(*string))
-    {
-        (*num) *= 10;
-        (*num) += (int) (*string-'0');
-        string++;
-    }
-    (*num) *= sign;
-    return string - index;
+	int i = 0;
+	*num = 0;
+	int sign = 1;
+	if (string[i] == '+' || string[i] == '-')
+	{
+		if (string[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (isDigit(string[i]))
+	{
+		(*num) *= 10;
+		(*num) += (int)(string[i] - '0');
+		i++;
+	}
+	(*num) *= sign;
+	return i;
 }
 
 int pow(int num, int exp)

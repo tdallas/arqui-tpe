@@ -19,7 +19,7 @@ void stringToUpper(char *s);
 void stringToLower(char *s);
 int stringIsNum(char *string);
 void inToString(int num, char *ret);
-int stringToInt(char *string, int *num);
+int stringToInt(const char *string, int *num);
 int pow(int num, int exp);
 
 #endif
