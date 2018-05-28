@@ -40,9 +40,12 @@ void free(void *pointer)
 
 
 int printf(const char *str, ...){
+    int result;
     va_list arguments;
     va_start(arguments, str);
-    return vprintf(str, arguments);
+    result = vprintf(str, arguments);
+    va_end(arguments);
+    return result;
 }
 
 int vprintf(const char *str, va_list arguments)
@@ -80,24 +83,29 @@ int vprintf(const char *str, va_list arguments)
         }
         strIndex++;
     }
-    va_end(arguments);
     return strIndex;
 }
 
 int sscanf(const char *str, const char *format, ...)
 {
+    int result;
     va_list args;
     va_start(args, format);
-    return vsscanf(str, format, args);
+    result = vsscanf(str, format, args);
+    va_end(args);
+    return result;
 }
 
 int scanf(const char *format, ...)
 {
+    int result;
     va_list args;
     va_start(args, format);
     char buffer[BUFFERSIZE];
     readLine(buffer);
-    return vsscanf(buffer, format, args);
+    result = vsscanf(buffer, format, args);
+    va_end(args);
+    return result;
 }
 
 int vsscanf(const char *str, const char *format, va_list args)
@@ -136,7 +144,7 @@ int vsscanf(const char *str, const char *format, va_list args)
             case 'd':
             case 'i':
                 num = va_arg(args, int *);
-                strIndex += stringToInt(str, num);
+                strIndex += stringToInt(str + strIndex, num);
                 n++;
                 break;
             case 'c':
@@ -154,10 +162,9 @@ int vsscanf(const char *str, const char *format, va_list args)
                 }
                 n++;
             }
-            ++formatIndex;
+            formatIndex++;
         }
     }
-    va_end(args);
     return n;
 }
 
