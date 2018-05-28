@@ -21,6 +21,7 @@ int main()
 		{
 			putchar('\n');
 		}
+		clearWorkSpace();
 	}
 	while (1)
 	{

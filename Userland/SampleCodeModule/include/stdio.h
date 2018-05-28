@@ -20,5 +20,6 @@ int sscanf(const char *str, const char *format, ...);
 int scanf(const char *format, ...);
 int vsscanf(const char *str, const char *format, va_list args);
 void readLine(char *buff);
+void clearWorkSpace();
 
 #endif

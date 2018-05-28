@@ -168,7 +168,7 @@ int vsscanf(const char *str, const char *format, va_list args)
     return n;
 }
 
-void readLine(char buff[BUFFERSIZE])
+void readLine(char buffer[BUFFERSIZE])
 {
     int bufferIndex = 0;
     int c;
@@ -187,11 +187,15 @@ void readLine(char buff[BUFFERSIZE])
         {
             if (bufferIndex <= BUFFERSIZE)
             {
-                buff[bufferIndex++] = c;
+                buffer[bufferIndex++] = c;
             }
             putchar(c);
         }
     }
-    buff[bufferIndex] = '\0';
+    buffer[bufferIndex] = '\0';
     return;
+}
+
+void clearWorkSpace(){
+    systemCall(5, 0, 0, 0, 0, 0);
 }
