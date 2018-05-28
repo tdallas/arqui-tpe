@@ -218,7 +218,7 @@ void readLine(char buff[BUFFERSIZE])
     {
         if (c == '\b')
         {
-            if (bufferIndex != 0)
+            if (bufferIndex > 0)
             {
                 bufferIndex--;
                 putchar('\b');
