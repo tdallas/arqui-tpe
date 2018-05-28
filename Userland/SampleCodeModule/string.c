@@ -123,3 +123,14 @@ void *memcpy(void *destination, const void *source, long unsigned int length)
 
 	return destination;
 }
+
+void *memset(void *destiation, int c, long unsigned int length)
+{
+	char chr = (char)c;
+	char *dst = (char *)destiation;
+
+	while (length--)
+		dst[length] = chr;
+
+	return destiation;
+}
