@@ -85,3 +85,41 @@ char *strcpy(char *destination, const char *source){
     *destination = '\0';
     return aux;
 }
+
+void *memcpy(void *destination, const void *source, long unsigned int length)
+{
+	/*
+	* memcpy does not support overlapping buffers, so always do it
+	* forwards. (Don't change this without adjusting memmove.)
+	*
+	* For speedy copying, optimize the common case where both pointers
+	* and the length are word-aligned, and copy word-at-a-time instead
+	* of byte-at-a-time. Otherwise, copy by bytes.
+	*
+	* The alignment logic below should be portable. We rely on
+	* the compiler to be reasonably intelligent about optimizing
+	* the divides and modulos out. Fortunately, it is.
+	*/
+	long unsigned int i;
+
+	if ((long unsigned int)destination % sizeof(unsigned int) == 0 &&
+		(long unsigned int)source % sizeof(unsigned int) == 0 &&
+		length % sizeof(unsigned int) == 0)
+	{
+		unsigned int *d = (unsigned int *)destination;
+		const unsigned int *s = (const unsigned int *)source;
+
+		for (i = 0; i < length / sizeof(unsigned int); i++)
+			d[i] = s[i];
+	}
+	else
+	{
+		char *d = (char *)destination;
+		const char *s = (const char *)source;
+
+		for (i = 0; i < length; i++)
+			d[i] = s[i];
+	}
+
+	return destination;
+}

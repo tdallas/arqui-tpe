@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <constantPrints.h>
 #include <stdlib.h>
+#include <blobsFront.h>
 
 int main()
 {
@@ -28,6 +29,7 @@ int main()
 			putchar(c);
 		}
 	}
+
 
 	return 0;
 }
