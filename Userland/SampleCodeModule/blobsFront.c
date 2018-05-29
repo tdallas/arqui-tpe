@@ -214,10 +214,10 @@ void imprimeTablero(const tipoPartida *partida){
 			printf("  0%d", i);
 
 	//imprimo parte superior del tablero
-	printf("\n     ╔");
+	printf("\n     #");
 	for(i=1;i<(4*(*partida).columnas);i++)
-		printf("%s", (i % 4)? "═" : "╦");
-	printf("╗\n");
+		printf("%s", (i % 4)? "#" : "#");
+	printf("#\n");
 
 
 	for(i=0;i<(*partida).filas;i++){
@@ -226,33 +226,33 @@ void imprimeTablero(const tipoPartida *partida){
 				if(j==0){
 					//imprimo los numeros de las filas
 					if(i>9)
-						printf("  %d ║   ", i);
+						printf("  %d #   ", i);
 					else
-						printf("  0%d ║   ", i);
+						printf("  0%d #   ", i);
 				}
 				else
-					printf("║   ");
+					printf("#   ");
 			}
 			else{
 				if(j==0){
 					//imprimo los numeros de las filas
 					if(i>9)
-						printf("  %d ║ %c ", i, (*partida).tablero[i][j]);
+						printf("  %d # %c ", i, (*partida).tablero[i][j]);
 					else
-						printf("  0%d ║ %c ", i, (*partida).tablero[i][j]);
+						printf("  0%d # %c ", i, (*partida).tablero[i][j]);
 				}
 				else
-					printf("║ %c ", (*partida).tablero[i][j]);
+					printf("# %c ", (*partida).tablero[i][j]);
 			}
 		}
 		//imprimo lineas del tablero entre fila y fila
-		printf("║\n    %s", (i!=(((*partida).filas)-1)) ? " ╠" : " ╚");
+		printf("#\n    %s", (i!=(((*partida).filas)-1)) ? " #" : " #");
 		for(j = 1; j <(4*(*partida).columnas); j++)
 			if(i!=(*partida).filas-1)
-				printf("%s", (j % 4)? "═" : "╬");
+				printf("%s", (j % 4)? "#" : "#");
 			else
-				printf("%s", (j % 4)? "═" : "╩");
-		printf("%s\n", (i!=(((*partida).filas)-1)) ? "╣" : "╝");
+				printf("%s", (j % 4)? "#" : "#");
+		printf("%s\n", (i!=(((*partida).filas)-1)) ? "#" : "#");
 	}
 	printf("\n");
 
