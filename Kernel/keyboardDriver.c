@@ -1,6 +1,8 @@
 #include <keyboardDriver.h>
 
-#define IS_ALPHA(C) ((C >= 'a' && C <= 'z') ? 1 : 0)
+#define IS_ALPHA(C) (C >= 'a' && C <= 'z')
+
+static int keyboardType = 0;
 
 static const char keyMap[128] =
     {
@@ -116,39 +118,41 @@ void keyboard_handler()
     {
       altKey = 1;
     }
-    char c = keyMap[keyCode];
+    char c;
+    if(keyboardType == 0){
+      c = keyMap[keyCode];
+    }
     if (c != 0)
     {
       if (shiftKey)
       {
         if (!IS_ALPHA(c) || !capsKey)
         {
-          c = shiftKeyMap[keyCode];
+          if(keyboardType == 0){
+            c = shiftKeyMap[keyCode];
+          }
         }
       }
       else
       {
         if (IS_ALPHA(c) && capsKey)
         {
-          c = shiftKeyMap[keyCode];
+          if(keyboardType == 0){
+            c = shiftKeyMap[keyCode];
+          }
         }
       }
-      putCharBuffer(c);
+      buffer[writeIndex] = c;
+      writeIndex = (writeIndex + 1) % BUFFER_SIZE;
+      if (elements < BUFFER_SIZE)
+      {
+        elements++;
+      }
+      else
+      {
+        readIndex = (readIndex + 1) % BUFFER_SIZE;
+      }
     }
-  }
-}
-
-void putCharBuffer(int c)
-{
-  buffer[writeIndex] = c;
-  writeIndex = (writeIndex + 1) % BUFFER_SIZE;
-  if (elements < BUFFER_SIZE)
-  {
-    elements++;
-  }
-  else
-  {
-    readIndex = (readIndex + 1) % BUFFER_SIZE;
   }
 }
 
