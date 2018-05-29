@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <lib.h>
 #include <moduleLoader.h>
-#include <videoDriver.h>
+#include <naiveConsole.h>
 
 static void loadModule(uint8_t **module, void *targetModuleAddress);
 static uint32_t readUint32(uint8_t **address);
@@ -20,19 +20,19 @@ static void loadModule(uint8_t **module, void *targetModuleAddress)
 {
 	uint32_t moduleSize = readUint32(module);
 
-	printString("  Will copy module at 0x", 255, 255, 255);
-	printHex((uint64_t)*module);
-	printString(" to 0x", 255, 255, 255);
-	printHex((uint64_t)targetModuleAddress);
-	printString(" (", 255, 255, 255);
-	printHex(moduleSize);
-	printString(" bytes)", 255, 255, 255);
+	ncPrint("  Will copy module at 0x");
+	ncPrintHex((uint64_t)*module);
+	ncPrint(" to 0x");
+	ncPrintHex((uint64_t)targetModuleAddress);
+	ncPrint(" (");
+	ncPrintDec(moduleSize);
+	ncPrint(" bytes)");
 
 	memcpy(targetModuleAddress, *module, moduleSize);
 	*module += moduleSize;
 
-	printString(" [Done]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncPrint(" [Done]");
+	ncNewline();
 }
 
 static uint32_t readUint32(uint8_t **address)

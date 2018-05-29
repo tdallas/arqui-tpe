@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-static int8_t *mem = (int8_t *)0x10000000;
+static int8_t *mem = (int8_t *)0x1000000;
 
 void *malloc(uint64_t length)
 {

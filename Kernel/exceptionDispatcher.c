@@ -1,4 +1,4 @@
-#include <videoDriver.h>
+#include <naiveConsole.h>
 
 #define ZERO_EXCEPTION_ID 0
 #define INVALID_OP_CODE_EXCEPTION_ID 0
@@ -16,10 +16,10 @@ void exceptionDispatcher(int exception)
 
 static void zero_division()
 {
-	printString("ERROR: Division by zero exception.", 255, 255, 255);
+	ncPrint("ERROR: Division by zero exception.");
 }
 
 static void invalid_op_code()
 {
-	printString("ERROR: Invalid opcode exception.", 255, 255, 255);
+	ncPrint("ERROR: Invalid opcode exception.");
 }

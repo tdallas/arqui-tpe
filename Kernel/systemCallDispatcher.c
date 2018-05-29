@@ -2,6 +2,7 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 #include <lib.h>
+#include <naiveConsole.h>
 
 static uint64_t getTime(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t read(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
@@ -34,7 +35,7 @@ static uint64_t read(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint
 
 static uint64_t write(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
-	writeChar((unsigned char)rsi, 255, 255, 255);
+	ncPrintChar((unsigned char)rsi);
 	return 1;
 }
 
@@ -49,6 +50,6 @@ static uint64_t memalloc(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, 
 }
 
 static uint64_t clearWorkSpace(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
-	clearScreen();
+	ncClear();
 	return 1;
 }

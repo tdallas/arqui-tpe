@@ -1,9 +1,9 @@
 #include <stdint.h>
 #include <lib.h>
 #include <moduleLoader.h>
+#include <naiveConsole.h>
 #include <idtLoader.h>
 #include <time.h>
-#include <videoDriver.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -35,79 +35,79 @@ void *initializeKernelBinary()
 {
 	char buffer[10];
 
-	printString("[x64BareBones]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("[x64BareBones]");
+	ncNewline();
 
-	printString("CPU Vendor:", 255, 255, 255);
-	printString(cpuVendor(buffer), 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("CPU Vendor:");
+	ncPrint(cpuVendor(buffer));
+	ncNewline();
 
-	printString("[Loading modules]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("[Loading modules]");
+	ncNewline();
 	void *moduleAddresses[] = {
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress};
 
 	loadModules(&endOfKernelBinary, moduleAddresses);
-	printString("[Done]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("[Done]");
+	ncNewline();
+	ncNewline();
 
-	printString("[Initializing kernel's binary]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("[Initializing kernel's binary]");
+	ncNewline();
 
 	clearBSS(&bss, &endOfKernel - &bss);
 
-	printString("  text: 0x", 255, 255, 255);
-	printHex((uint64_t)&text);
-	writeChar('\n', 255, 255, 255);
-	printString("  rodata: 0x", 255, 255, 255);
-	printHex((uint64_t)&rodata);
-	writeChar('\n', 255, 255, 255);
-	printString("  data: 0x", 255, 255, 255);
-	printHex((uint64_t)&data);
-	writeChar('\n', 255, 255, 255);
-	printString("  bss: 0x", 255, 255, 255);
-	printHex((uint64_t)&bss);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("  text: 0x");
+	ncPrintHex((uint64_t)&text);
+	ncNewline();
+	ncPrint("  rodata: 0x");
+	ncPrintHex((uint64_t)&rodata);
+	ncNewline();
+	ncPrint("  data: 0x");
+	ncPrintHex((uint64_t)&data);
+	ncNewline();
+	ncPrint("  bss: 0x");
+	ncPrintHex((uint64_t)&bss);
+	ncNewline();
 
-	printString("[Done]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("[Done]");
+	ncNewline();
+	ncNewline();
 	return getStackBase();
 }
 
 int main()
 {
-	printString("[IDT Loader]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("[IDT Loader]");
+	ncNewline();
 
-	printString("  Loading instructions...", 255, 255, 255);
+	ncPrint("  Loading instructions...");
 	load_idt(); //Carga instrucciones
-	printString("  Done.", 255, 255, 255);
+	ncPrint("  Done.");
 	
-	writeChar('\n', 255, 255, 255);
-	printString("[Finished]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncNewline();
+	ncPrint("[Finished]");
+	ncNewline();
+	ncNewline();
 
-	printString("[Kernel Main]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
-	printString("  Sample code module at 0x", 255, 255, 255);
-	printHex((uint64_t)sampleCodeModuleAddress);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("[Kernel Main]");
+	ncNewline();
+	ncPrint("  Sample code module at 0x");
+	ncPrintHex((uint64_t)sampleCodeModuleAddress);
+	ncNewline();
 
-	printString("  Sample data module at 0x", 255, 255, 255);
-	printHex((uint64_t)sampleDataModuleAddress);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("  Sample data module at 0x");
+	ncPrintHex((uint64_t)sampleDataModuleAddress);
+	ncNewline();
 
-	printString("[Finished]", 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
-	writeChar('\n', 255, 255, 255);
+	ncPrint("[Finished]");
+	ncNewline();
+	ncNewline();
 
-	printString("System booting in 2 seconds...", 255, 255, 255);
+	ncPrint("System booting in 2 seconds...");
 	seconds_delay(2);
-	clearScreen();
+	ncClear();
 	speakerBeep();
 
 	((EntryPoint)sampleCodeModuleAddress)();
