@@ -144,6 +144,7 @@ int vsscanf(const char *str, const char *format, va_list args)
                     character++;
                     strIndex++;
                 }
+                *character = '\0';
                 n++;
             }
             formatIndex++;
@@ -247,7 +248,7 @@ int scanf(const char *format, ...)
                 }
                 formatIndex++;
                 break;
-            case 's':
+            case 's':  //String hasta espacio
                 auxChar = va_arg(args, char *);
                 auxIndex = bufferIndex;
                 while (!isSpace(buffer[bufferIndex]) && buffer[bufferIndex] != '\0')
@@ -257,6 +258,22 @@ int scanf(const char *format, ...)
                     bufferIndex++;
                 }
                 if(bufferIndex > auxIndex){
+                    auxChar[auxIndex] = '\0';
+                    result++;
+                }
+                formatIndex++;
+                break;
+            case 'n':  //String hasta el enter
+                auxChar = va_arg(args, char *);
+                auxIndex = bufferIndex;
+                while (buffer[bufferIndex] !='\n')
+                {
+                    *auxChar = buffer[bufferIndex];
+                    auxChar++;
+                    bufferIndex++;
+                }
+                if(bufferIndex > auxIndex){
+                    auxChar[auxIndex] = '\0';
                     result++;
                 }
                 formatIndex++;

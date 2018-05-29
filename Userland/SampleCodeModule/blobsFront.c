@@ -260,81 +260,70 @@ void imprimeTablero(const tipoPartida *partida){
 }
 
 int leeIngresado(tipoPartida *partida){
-	int flagRepite, resultado=0;
+	int flagScanf, flagRepite, resultado=0;
 	char c;
+	char s[40];
 
 	do{
-		if((flagRepite=scanf("[%d,%d][%d,%d", &(*partida).deFil,\
-		 &(*partida).deCol, &(*partida).aFil, &(*partida).aCol)))\
+		flagScanf = scanf("%n", s);
+		if(getchar()!='\n'){
+				//limpia el buffer y corta apenas encuentra '\n'
+			do{
+				c=getchar();
+			}while(c!='\n');
+			flagScanf=0;
+			}
+		if(flagScanf!=1){
+			printf("Error, volver a ingresar: ");
+		}
+		else if (flagScanf == 1)
 		{
-			//como el scanf no valida 
-			//si el ultimo caracter es ']' hago lo siguiente
-			c=getchar();
-			if(c=='\n')
-				flagRepite=0;
-			else if(c!=']'){
-				//limpia buffer y tira error si el ultimo caracter no es ']'
-				do{
-					c=getchar();
-				}while(c!='\n');
-				flagRepite=0;
+			if ((flagRepite = sscanf(s, "[%d,%d][%d,%d]", &(*partida).deFil, &(*partida).deCol, &(*partida).aFil, &(*partida).aCol)))
+			{
+				if (flagRepite == 4)
+					resultado = LEE_Y_MUEVE;
+				else
+					flagRepite = 0;
 			}
-			else if(c==']'){
-				if(getchar()!='\n'){
-					//limpia buffer
-					// y tira error si ingresa algo mas despues del ']'
-					do{
-						c=getchar();
-					}while(c!='\n');
-					flagRepite=0;
-				}
+			else if ((flagRepite = scanf("save %s", (*partida).s)))
+			{
+				if (flagRepite == 1)
+					resultado = GUARDA_PARTIDA;
+				else
+					flagRepite = 0;
 			}
-			if (flagRepite!=4)
-				printf("Error, volver a ingresar: ");
-			else
-				resultado=LEE_Y_MUEVE;
-		}
-		else if((flagRepite=scanf("save %s", (*partida).s))){
-			if (getchar()!='\n'){
-				do{
-					c=getchar();
-				}while(c!='\n');
-				flagRepite=0;
-			}
-			if(flagRepite==0)
-				printf("Error, volver a ingresar: ");
-			else
-				resultado=GUARDA_PARTIDA;
-		}
-		else if((flagRepite=scanf("%s", (*partida).s))){
-			if (getchar()!='\n'){
-				//si se pasa de 4 caracteres limpia buffer y tira error
-				do{
-					c=getchar();
-				}while(c!='\n');
-				flagRepite=0;
-			}
-			if(flagRepite==0)
-				printf("Error, volver a ingresar: ");
-			else{
-				if (!strcmp((*partida).s,"quit")){
-					printf("¿Desea guardar su partida?\n");
-					if(siOno()){
-						printf("Ingrese el nombre del archivo");
-						printf("(maximo 34 caracteres): ");
-						leeNombre(partida);
-						resultado=SALE_Y_GUARDA;
+			else if ((flagRepite = scanf("%s", (*partida).s)))
+			{
+				if (flagRepite == 1)
+				{
+					if (!strcmp((*partida).s, "quit"))
+					{
+						printf("¿Desea guardar su partida?\n");
+						if (siOno())
+						{
+							printf("Ingrese el nombre del archivo");
+							printf("(maximo 34 caracteres): ");
+							leeNombre(partida);
+							resultado = SALE_Y_GUARDA;
+						}
+						else
+							resultado = SALE_SIN_GUARDAR;
 					}
 					else
-						resultado=SALE_SIN_GUARDAR;
+					{
+						flagRepite = 0;
+					}
 				}
 				else{
-					printf("Error, volver a ingresar: ");
-					flagRepite=0;
+					flagRepite = 0;
 				}
 			}
+			if(flagRepite == 0){
+				printf("Error, volver a ingresar: ");
+				flagScanf = 0;
+			}
 		}
-	}while(flagRepite==0);
+	}while(flagScanf!=1);
 	return resultado;
 }
 
