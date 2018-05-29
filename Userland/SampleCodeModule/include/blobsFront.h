@@ -7,7 +7,7 @@
 #include <time.h>
 #include <blobsBack.h>
 
-#define LIMPIAPANTALLA printf("Limpia")
+#define LIMPIAPANTALLA clearWorkSpace()
 
 #define MINFILSYCOLS 5
 #define MAXFILSYCOLS 30

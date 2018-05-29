@@ -5,9 +5,9 @@ int iniciarBlobWars(){
 	partida.s=malloc(MAXNOMBREARCHIVO);
 	srand(time(NULL));
 	LIMPIAPANTALLA;
-	printf("\n¡¡Bienvenido a Blob Wars!!\n");
+	printf("\nBienvenido a Blob Wars!!\n");
 	while(menuJuego(&partida)==1);
-	printf("\n¡Hasta luego!\n\n");
+	printf("\nHasta luego!\n\n");
 	free(partida.s);
 	return 1;
 }
@@ -294,7 +294,7 @@ int leeIngresado(tipoPartida *partida){
 			else
 				resultado=LEE_Y_MUEVE;
 		}
-		else if((flagRepite=scanf("save %34s", (*partida).s))){
+		else if((flagRepite=scanf("save %s", (*partida).s))){
 			if (getchar()!='\n'){
 				do{
 					c=getchar();
@@ -306,7 +306,7 @@ int leeIngresado(tipoPartida *partida){
 			else
 				resultado=GUARDA_PARTIDA;
 		}
-		else if((flagRepite=scanf("%4s", (*partida).s))){
+		else if((flagRepite=scanf("%s", (*partida).s))){
 			if (getchar()!='\n'){
 				//si se pasa de 4 caracteres limpia buffer y tira error
 				do{
@@ -349,7 +349,7 @@ int movimiento(tipoPartida *partida){
 		printf("[ff,cc][ff,cc] , ");
 		printf("save filename(maximo 34 caracteres) ");
 		printf("o quit\n");
-		printf("Ingrese acción: ");
+		printf("Ingrese accion: ");
 		resultado=leeIngresado(partida);
 		if(resultado==LEE_Y_MUEVE){
 			flagMovimiento=muevePosicion(partida);
@@ -447,7 +447,7 @@ void leeNombre(tipoPartida *partida){
 	char aux;
 
 	do{
-		flag=scanf("%34s", (*partida).s);
+		flag=scanf("%s", (*partida).s);
 		if(getchar()!='\n'){
 		//limpia el buffer y corta apenas encuentra '\n'
 		//sirve solamente si se pasa de los 34 caracteres
@@ -470,7 +470,7 @@ int siOno(){
 	do{
 		do{
 			printf("Ingrese si o no: ");
-			flag=scanf("%3s", s);
+			flag=scanf("%s", s);
 			if(getchar()!='\n'){
 			//limpia el buffer y corta apenas encuentra '\n'
 				do{

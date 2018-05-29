@@ -10,8 +10,15 @@ static uint64_t write(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uin
 static uint64_t beepSound(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t memalloc(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t clearWorkSpace(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+static uint64_t putStringKeyboardBuffer(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
-static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) = {getTime, read, write, beepSound, memalloc, clearWorkSpace};
+static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) = {getTime,                         //0
+																									   read,                            //1
+																									   write,                           //2
+																									   beepSound,                       //3
+																									   memalloc,                        //4
+																									   clearWorkSpace,                  //5
+																									   putStringKeyboardBuffer};        //6
 
 uint64_t systemCallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
@@ -46,5 +53,10 @@ static uint64_t memalloc(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, 
 
 static uint64_t clearWorkSpace(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
 	ncClear();
+	return 1;
+}
+
+static uint64_t putStringKeyboardBuffer(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
+	putStringBuffer((char *)rsi);
 	return 1;
 }

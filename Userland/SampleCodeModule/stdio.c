@@ -1,9 +1,5 @@
 #include <stdio.h>
 
-#define BORRA_BUFFER while (getchar() != '\n')
-#define BUFFERSIZE 80
-#define INT_BUFFER_SIZE 12
-
 int abs(int a)
 {
     if (a < 0)
@@ -38,8 +34,8 @@ void free(void *pointer)
     return;
 }
 
-
-int printf(const char *str, ...){
+int printf(const char *str, ...)
+{
     int result;
     va_list arguments;
     va_start(arguments, str);
@@ -92,18 +88,6 @@ int sscanf(const char *str, const char *format, ...)
     va_list args;
     va_start(args, format);
     result = vsscanf(str, format, args);
-    va_end(args);
-    return result;
-}
-
-int scanf(const char *format, ...)
-{
-    int result;
-    va_list args;
-    va_start(args, format);
-    char buffer[BUFFERSIZE];
-    readLine(buffer);
-    result = vsscanf(buffer, format, args);
     va_end(args);
     return result;
 }
@@ -168,7 +152,7 @@ int vsscanf(const char *str, const char *format, va_list args)
     return n;
 }
 
-void readLine(char buffer[BUFFERSIZE])
+int readLine(char buffer[BUFFER_SIZE])
 {
     int bufferIndex = 0;
     int c;
@@ -185,17 +169,126 @@ void readLine(char buffer[BUFFERSIZE])
         }
         else if (c != EOF)
         {
-            if (bufferIndex <= BUFFERSIZE)
+            if (bufferIndex <= BUFFER_SIZE)
             {
                 buffer[bufferIndex++] = c;
             }
             putchar(c);
         }
     }
-    buffer[bufferIndex] = '\0';
-    return;
+    putchar('\n');
+    buffer[bufferIndex++] = '\n';
+    buffer[bufferIndex++] = '\0';
+    return bufferIndex;
 }
 
-void clearWorkSpace(){
+static int bufferFlag = 0;
+
+int scanf(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+    char buffer[BUFFER_SIZE];
+    int bufferLength = readLine(buffer);
+    int bufferIndex = 0;
+    int formatIndex = 0;
+    int result = 0;
+    int flag = 0;
+    int auxIndex;
+
+    char *auxChar;
+    int *auxNum;
+
+    while (format[formatIndex] != '\0' && !flag && bufferIndex < bufferLength)
+    {
+        if (format[formatIndex] != '%')
+        {
+            if (format[formatIndex] != buffer[bufferIndex])
+            {
+                flag = 1;
+            }
+            else
+            {
+                formatIndex++;
+                bufferIndex++;
+            }
+        }
+        else
+        {
+            formatIndex++;
+            switch (format[formatIndex])
+            {
+            default:
+                if (buffer[bufferIndex] != '%')
+                {
+                    flag = 1;
+                }
+                else
+                {
+                    bufferIndex++;
+                }
+                break;
+            case 'd':
+            case 'i':
+                auxNum = va_arg(args, int *);
+                auxIndex = bufferIndex;
+                bufferIndex += stringToInt(buffer + bufferIndex, auxNum);
+                if(bufferIndex > auxIndex){
+                    result++;
+                }
+                formatIndex++;
+                break;
+            case 'c':
+                auxChar = va_arg(args, char *);
+                if(isAlpha(buffer[bufferIndex])){
+                    *auxChar = buffer[bufferIndex++];
+                    result++;
+                }
+                formatIndex++;
+                break;
+            case 's':
+                auxChar = va_arg(args, char *);
+                auxIndex = bufferIndex;
+                while (!isSpace(buffer[bufferIndex]) && buffer[bufferIndex] != '\0')
+                {
+                    *auxChar = buffer[bufferIndex];
+                    auxChar++;
+                    bufferIndex++;
+                }
+                if(bufferIndex > auxIndex){
+                    result++;
+                }
+                formatIndex++;
+                break;
+            }
+        }
+    }
+
+    putStringKeyboardBuffer(buffer+bufferIndex); //Guarda en buffer lo no utilizado, esto es para que el scanf funcione como el de c
+
+    if(bufferFlag && bufferIndex == 0){ //En la anterior salio primero y en la actual tambien entonces borro el buffer
+        BORRA_BUFFER
+        bufferFlag = 0;      // Es variable static
+    }
+    else{
+        bufferFlag = 0;
+    }
+
+    if(bufferIndex == 0){  //Salio en el primero
+        bufferFlag = 1;
+    }
+
+    va_end(args);
+    return result;
+}
+
+void putStringKeyboardBuffer(char *s){
+    systemCall(6, (uint64_t)s, 0, 0, 0, 0);
+}
+
+
+void clearWorkSpace()
+{
     systemCall(5, 0, 0, 0, 0, 0);
 }
