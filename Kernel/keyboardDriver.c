@@ -152,13 +152,6 @@ void putCharBuffer(int c)
   }
 }
 
-void putStringBuffer(char *s){
-  while(*s != '\0'){
-    putCharBuffer(*s);
-    s++;
-  }
-}
-
 int getChar()
 {
   if (elements == 0)

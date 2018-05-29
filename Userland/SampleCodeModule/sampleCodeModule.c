@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <blobsFront.h>
 
-#define BORRABUFFER while (getchar() != '\n'){}
-
 int main()
 {
 	printf("Epoch Time: %d.\n", time(NULL));
@@ -18,7 +16,6 @@ int main()
 		{
 			printf(", el num es:%d.\n", num[0]);
 		}
-		BORRABUFFER
 		//clearWorkSpace();
 	}
 	char c;

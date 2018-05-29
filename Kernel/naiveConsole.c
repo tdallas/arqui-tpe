@@ -26,7 +26,7 @@ void ncPrintChar(char character)
 		ncNewline();
 	}
 	else{
-		*currentVideo = character;
+		*currentVideo = (uint8_t)character;
 		currentVideo += 2;
 	}
 }

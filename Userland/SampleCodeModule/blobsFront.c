@@ -261,22 +261,14 @@ void imprimeTablero(const tipoPartida *partida){
 
 int leeIngresado(tipoPartida *partida){
 	int flagScanf, flagRepite, resultado=0;
-	char c;
 	char s[40];
 
 	do{
 		flagScanf = scanf("%n", s);
-		if(getchar()!='\n'){
-				//limpia el buffer y corta apenas encuentra '\n'
-			do{
-				c=getchar();
-			}while(c!='\n');
-			flagScanf=0;
-			}
 		if(flagScanf!=1){
 			printf("Error, volver a ingresar: ");
 		}
-		else if (flagScanf == 1)
+		else
 		{
 			if ((flagRepite = sscanf(s, "[%d,%d][%d,%d]", &(*partida).deFil, &(*partida).deCol, &(*partida).aFil, &(*partida).aCol)))
 			{
@@ -285,20 +277,20 @@ int leeIngresado(tipoPartida *partida){
 				else
 					flagRepite = 0;
 			}
-			else if ((flagRepite = scanf("save %s", (*partida).s)))
+			else if ((flagRepite = sscanf(s, "save %s", (*partida).s)))
 			{
 				if (flagRepite == 1)
 					resultado = GUARDA_PARTIDA;
 				else
 					flagRepite = 0;
 			}
-			else if ((flagRepite = scanf("%s", (*partida).s)))
+			else if ((flagRepite = sscanf(s, "%s", (*partida).s)))
 			{
 				if (flagRepite == 1)
 				{
 					if (!strcmp((*partida).s, "quit"))
 					{
-						printf("¿Desea guardar su partida?\n");
+						printf("Desea guardar su partida?\n");
 						if (siOno())
 						{
 							printf("Ingrese el nombre del archivo");
@@ -375,24 +367,24 @@ void imprimeGanador(const tipoPartida *partida){
 
 	if((*partida).modojuego==0){
 		if((*partida).manchasA>(*partida).manchasZ){
-			printf("¡Felicitaciones! el Jugador 1(A) ha ganado.\n");
+			printf("Felicitaciones! el Jugador 1(A) ha ganado.\n");
 		}
 		else if((*partida).manchasZ>(*partida).manchasA){
-			printf("¡Felicitaciones! el Jugador 2(Z) ha ganado.\n");
+			printf("Felicitaciones! el Jugador 2(Z) ha ganado.\n");
 		}
 		else if((*partida).manchasZ==(*partida).manchasA){
-			printf("¡Felicitaciones la partida ha terminado en un empate!\n");
+			printf("Felicitaciones! la partida ha terminado en un empate!\n");
 		}
 	}
 	else if((*partida).modojuego==1){
 		if((*partida).manchasA>(*partida).manchasZ){
-			printf("¡Felicitaciones! usted le ha ganado a la computadora.\n");
+			printf("Felicitaciones! usted le ha ganado a la computadora.\n");
 		}
 		else if((*partida).manchasZ>(*partida).manchasA){
 			printf("La computadora ha ganado.\n");
 		}
 		else if((*partida).manchasZ==(*partida).manchasA){
-			printf("¡Felicitaciones la partida ha terminado en un empate!\n");
+			printf("Felicitaciones la partida ha terminado en un empate!\n");
 		}
 	}
 
@@ -401,19 +393,11 @@ void imprimeGanador(const tipoPartida *partida){
 
 void leeNumero(int *numero, int desdeN, int hastaN){
 	int flagCorta, resultado, auxnum;
-	char aux2;
 
 	//lee numero en intervalo que es valido lo ingresado es solamente numero
 	do{
 		do{
 			flagCorta=scanf("%d", &auxnum);
-			if(getchar()!='\n'){
-				//limpia el buffer y corta apenas encuentra '\n'
-				do{
-					aux2=getchar();
-				}while(aux2!='\n');
-				flagCorta=0;
-			}
 			if(flagCorta!=1){
 					printf("Error, volver a ingresar: ");
 			}
@@ -433,18 +417,9 @@ void leeNumero(int *numero, int desdeN, int hastaN){
 
 void leeNombre(tipoPartida *partida){
 	int flag;
-	char aux;
 
 	do{
 		flag=scanf("%s", (*partida).s);
-		if(getchar()!='\n'){
-		//limpia el buffer y corta apenas encuentra '\n'
-		//sirve solamente si se pasa de los 34 caracteres
-			do{
-				aux=getchar();
-			}while(aux!='\n');
-			flag=0;
-		}
 		if(flag!=1)
 			printf("Error, volver a ingresar: ");
 	}while(flag!=1);
@@ -454,19 +429,12 @@ void leeNombre(tipoPartida *partida){
 
 int siOno(){
 	int flag, resultado;
-	char s[4], aux;
+	char s[4];
 
 	do{
 		do{
 			printf("Ingrese si o no: ");
 			flag=scanf("%s", s);
-			if(getchar()!='\n'){
-			//limpia el buffer y corta apenas encuentra '\n'
-				do{
-					aux=getchar();
-				}while(aux!='\n');
-				flag=0;
-			}
 			if(flag!=1){
 				printf("Error en la respuesta ingresada, ");
 			}

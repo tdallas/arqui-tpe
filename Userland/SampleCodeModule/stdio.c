@@ -9,6 +9,11 @@ int abs(int a)
     return a;
 }
 
+void clearWorkSpace()
+{
+    systemCall(5, 0, 0, 0, 0, 0);
+}
+
 int getchar()
 {
     return systemCall(1, 0, 0, 0, 0, 0);
@@ -36,17 +41,9 @@ void free(void *pointer)
 
 int printf(const char *str, ...)
 {
-    int result;
     va_list arguments;
     va_start(arguments, str);
-    result = vprintf(str, arguments);
-    va_end(arguments);
-    return result;
-}
-
-int vprintf(const char *str, va_list arguments)
-{
-    char num[INT_BUFFER_SIZE];
+        char num[INT_BUFFER_SIZE];
     int strIndex = 0;
     while (str[strIndex] != '\0')
     {
@@ -79,22 +76,14 @@ int vprintf(const char *str, va_list arguments)
         }
         strIndex++;
     }
+    va_end(arguments);
     return strIndex;
 }
 
 int sscanf(const char *str, const char *format, ...)
 {
-    int result;
     va_list args;
     va_start(args, format);
-    result = vsscanf(str, format, args);
-    va_end(args);
-    return result;
-}
-
-int vsscanf(const char *str, const char *format, va_list args)
-{
-
     int strIndex = 0;
     int formatIndex = 0;
     int n = 0;
@@ -150,6 +139,8 @@ int vsscanf(const char *str, const char *format, va_list args)
             formatIndex++;
         }
     }
+
+    va_end(args);
     return n;
 }
 
@@ -178,12 +169,9 @@ int readLine(char buffer[BUFFER_SIZE])
         }
     }
     putchar('\n');
-    buffer[bufferIndex++] = '\n';
     buffer[bufferIndex++] = '\0';
     return bufferIndex;
 }
-
-static int bufferFlag = 0;
 
 int scanf(const char *format, ...)
 {
@@ -191,9 +179,10 @@ int scanf(const char *format, ...)
     va_start(args, format);
 
     char buffer[BUFFER_SIZE];
-    int bufferLength = readLine(buffer);
+    readLine(buffer);
     int bufferIndex = 0;
     int formatIndex = 0;
+
     int result = 0;
     int flag = 0;
     int auxIndex;
@@ -201,7 +190,7 @@ int scanf(const char *format, ...)
     char *auxChar;
     int *auxNum;
 
-    while (format[formatIndex] != '\0' && !flag && bufferIndex < bufferLength)
+    while (format[formatIndex] != '\0' && buffer[bufferIndex] !='\0' && !flag)
     {
         if (format[formatIndex] != '%')
         {
@@ -238,6 +227,9 @@ int scanf(const char *format, ...)
                 if(bufferIndex > auxIndex){
                     result++;
                 }
+                else{
+                    flag = 1;
+                }
                 formatIndex++;
                 break;
             case 'c':
@@ -245,6 +237,9 @@ int scanf(const char *format, ...)
                 if(isAlpha(buffer[bufferIndex])){
                     *auxChar = buffer[bufferIndex++];
                     result++;
+                }
+                else{
+                    flag = 1;
                 }
                 formatIndex++;
                 break;
@@ -261,12 +256,15 @@ int scanf(const char *format, ...)
                     auxChar[auxIndex] = '\0';
                     result++;
                 }
+                else{
+                    flag = 1;
+                }
                 formatIndex++;
                 break;
             case 'n':  //String hasta el enter
                 auxChar = va_arg(args, char *);
                 auxIndex = bufferIndex;
-                while (buffer[bufferIndex] !='\n')
+                while (buffer[bufferIndex] !='\0')
                 {
                     *auxChar = buffer[bufferIndex];
                     auxChar++;
@@ -276,36 +274,19 @@ int scanf(const char *format, ...)
                     auxChar[auxIndex] = '\0';
                     result++;
                 }
+                else{
+                    flag = 1;
+                }
                 formatIndex++;
                 break;
             }
         }
     }
 
-    putStringKeyboardBuffer(buffer+bufferIndex); //Guarda en buffer lo no utilizado, esto es para que el scanf funcione como el de c
-
-    if(bufferFlag && bufferIndex == 0){ //En la anterior salio primero y en la actual tambien entonces borro el buffer
-        BORRA_BUFFER
-        bufferFlag = 0;      // Es variable static
-    }
-    else{
-        bufferFlag = 0;
-    }
-
-    if(bufferIndex == 0){  //Salio en el primero
-        bufferFlag = 1;
+    if(flag || (format[formatIndex] == '\0' && buffer[bufferIndex] != '\0')){
+        return 0;
     }
 
     va_end(args);
     return result;
-}
-
-void putStringKeyboardBuffer(char *s){
-    systemCall(6, (uint64_t)s, 0, 0, 0, 0);
-}
-
-
-void clearWorkSpace()
-{
-    systemCall(5, 0, 0, 0, 0, 0);
 }
