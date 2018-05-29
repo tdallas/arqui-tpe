@@ -10,13 +10,13 @@
 #define LIMPIAPANTALLA clearWorkSpace()
 
 #define MINFILSYCOLS 5
-#define MAXFILSYCOLS 30
+#define MAXFILSYCOLS 10
 #define MAXNOMBREARCHIVO 35
 
 #define JUGADORUNO 1
 #define JUGADORDOS 2
 
-enum{JUGADORvsJUGADOR=1, JUGADORvsCOMPUTADORA, RECUPERAR, SALIR};
+enum{JUGADORvsJUGADOR=1, JUGADORvsCOMPUTADORA, SALIR};
 
 int iniciarBlobWars();
 int menuJuego(tipoPartida *partida);

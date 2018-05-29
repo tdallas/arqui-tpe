@@ -13,16 +13,15 @@ int iniciarBlobWars(){
 }
 
 int menuJuego(tipoPartida *partida){
-	int opcion, flagDeExit=1, flagDeRecuperar=1, flagJuegaDeNuevo=0,\
+	int opcion, flagDeExit=1, flagJuegaDeNuevo=0,\
 	flagDeError=0;\
 
 	printf("\n1. Juego de dos jugadores\n");
 	printf("2. Juego contra computadora\n");
-	printf("3. Recuperar un juego grabado\n");
-	printf("4. Terminar\n\n");
+	printf("3. Terminar\n\n");
 	printf("Elegir opcion: ");
 
-	leeNumero(&opcion, 1, 4);
+	leeNumero(&opcion, 1, 3);
 
 	while(flagDeExit==1 && flagDeError==0){
 		switch(opcion){
@@ -54,30 +53,6 @@ int menuJuego(tipoPartida *partida){
 					}
 				}
 			break;
-			case RECUPERAR:
-				printf("Ingrese el nombre del archivo a recuperar");
-				printf("(maximo 34 caracteres): ");
-
-				leeNombre(partida);
-
-				flagDeRecuperar=recuperarPartida(partida);
-				if(flagDeRecuperar==1){
-					printf("Partida recuperada con exito.\n");
-					flagDeExit=jugar(partida);
-				}
-				else if(flagDeRecuperar==0){
-					printf("Error al cargar");
-					printf("(El archivo esta corrupto o no existe).\n");
-					printf("¿Desea ingresar denuevo?\n");
-					if(!siOno())
-						opcion=SALIR;
-				}
-				if(flagDeExit==0){
-					printf("¿Desea jugar denuevo?\n");
-					flagJuegaDeNuevo=siOno();
-					liberaTablero(partida);
-				}
-			break;
 			case SALIR:
 				flagDeExit=0;
 				flagJuegaDeNuevo=0;
@@ -89,9 +64,9 @@ int menuJuego(tipoPartida *partida){
 
 void cantFilsyCols(tipoPartida *partida){
 
-	printf("Ingrese la cantidad de filas(Minimo 5 y Maximo 30): ");
+	printf("Ingrese la cantidad de filas(Minimo 5 y Maximo 10): ");
 	leeNumero(&(*partida).filas, MINFILSYCOLS, MAXFILSYCOLS);
-	printf("Ingrese la cantidad de columnas(Minimo 5 y Maximo 30): ");
+	printf("Ingrese la cantidad de columnas(Minimo 5 y Maximo 10): ");
 	leeNumero(&(*partida).columnas, MINFILSYCOLS, MAXFILSYCOLS);
 	
 	return;
@@ -265,7 +240,7 @@ int leeIngresado(tipoPartida *partida){
 
 	do{
 		flagScanf = scanf("%n", s);
-		if(flagScanf!=1){
+		if(flagScanf==1){
 			printf("Error, volver a ingresar: ");
 		}
 		else
@@ -277,34 +252,11 @@ int leeIngresado(tipoPartida *partida){
 				else
 					flagRepite = 0;
 			}
-			else if ((flagRepite = sscanf(s, "save %s", (*partida).s)))
-			{
-				if (flagRepite == 1)
-					resultado = GUARDA_PARTIDA;
-				else
-					flagRepite = 0;
-			}
 			else if ((flagRepite = sscanf(s, "%s", (*partida).s)))
 			{
-				if (flagRepite == 1)
+				if (flagRepite == 1 && !strcmp((*partida).s, "quit"))
 				{
-					if (!strcmp((*partida).s, "quit"))
-					{
-						printf("Desea guardar su partida?\n");
-						if (siOno())
-						{
-							printf("Ingrese el nombre del archivo");
-							printf("(maximo 34 caracteres): ");
-							leeNombre(partida);
-							resultado = SALE_Y_GUARDA;
-						}
-						else
-							resultado = SALE_SIN_GUARDAR;
-					}
-					else
-					{
-						flagRepite = 0;
-					}
+					resultado = SALE_SIN_GUARDAR;
 				}
 				else{
 					flagRepite = 0;
@@ -327,8 +279,7 @@ int movimiento(tipoPartida *partida){
 
 	do{
 		printf("Acciones: ");
-		printf("[ff,cc][ff,cc] , ");
-		printf("save filename(maximo 34 caracteres) ");
+		printf("[ff,cc][ff,cc] ");
 		printf("o quit\n");
 		printf("Ingrese accion: ");
 		resultado=leeIngresado(partida);
@@ -338,23 +289,6 @@ int movimiento(tipoPartida *partida){
 				printf("Error, movimiento no permitido.\n");
 			else if(flagMovimiento==NO_EXISTE_POSICION)
 				printf("Error, no existe la posicion.\n");
-		}
-		else if(resultado==GUARDA_PARTIDA){
-			flagGuardaPartida=guardarPartida(partida);
-			if(flagGuardaPartida==1)
-				printf("Partida guardada con exito.\n");
-			else if(flagGuardaPartida==0)
-				printf("Error al guardar partida.\n");
-		}
-		else if(resultado==SALE_Y_GUARDA){
-			flagGuardaPartida=guardarPartida(partida);
-			if(flagGuardaPartida==1){
-				printf("Partida guardada con exito.\n");
-				flagMovimiento=EXITO;
-			}
-			else if(flagGuardaPartida==0){
-				printf("Error al guardar partida.\n");
-			}
 		}
 		else if(resultado==SALE_SIN_GUARDAR)
 				flagMovimiento=EXITO;
