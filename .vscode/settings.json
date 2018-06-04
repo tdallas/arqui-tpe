@@ -6,6 +6,8 @@
         "stdio.h": "c",
         "stdarg.h": "c",
         "string.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "blobsback.h": "c",
+        "moduleloader.h": "c"
     }
 }

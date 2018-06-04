@@ -3,7 +3,7 @@
 
 #include "font.h"
 
-unsigned char __font_bitmap__[] = {
+static unsigned char fontBitMap[] = {
 //   0 $00 'char0'
 //	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
@@ -3480,8 +3480,6 @@ unsigned char __font_bitmap__[] = {
 	________,
 };
 
-unsigned char * pixel_map(int c) {
-	// 31 es el numero (segun codigo ascii) a partir del cual están las letras
-	// en el arreglo __font_bitmap__
-	return __font_bitmap__ + CHAR_HEIGHT * (c-31);
+unsigned char * fontPixelMap(unsigned char c) {
+	return fontBitMap + FONT_HEIGHT * (c-31);
 }

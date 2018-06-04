@@ -406,12 +406,14 @@ int buscaMovPosible(tipoPartida *partida){
 int buscaFichaComputadora(tipoPartida *partida){
 	int i, j;
 
+	char fichaTurno = JUGADORALETRA(partida->turno);
+
 	//primero comienzo por la fila y columna siguiente a donde quedo
 	i=(*partida).deFil;
 	for(j=((*partida).deCol+1);j<(*partida).columnas;j++){
 		if(j<0)
 			j=0;
-		if((*partida).tablero[i][j]=='Z'){
+		if((*partida).tablero[i][j]==fichaTurno){
 			(*partida).deFil=i;
 			(*partida).deCol=j;
 			return 1;
@@ -420,7 +422,7 @@ int buscaFichaComputadora(tipoPartida *partida){
 	//si en esa fila no encuentra, sigue comunmente
 	for(i=((*partida).deFil+1);i<(*partida).filas;i++)
 		for(j=0;j<(*partida).columnas;j++)
-			if((*partida).tablero[i][j]=='Z'){
+			if((*partida).tablero[i][j]==fichaTurno){
 				(*partida).deFil=i;
 				(*partida).deCol=j;
 				return 1;
@@ -439,8 +441,7 @@ void mueveFichaComputadora(tipoPartida *partida){
 	(difFil==1 && difCol==0))\
 	{
 	//Caso mueve una posicion
-		SUMAMANCHA(2)
-		(*partida).manchasZ++;
+		SUMAMANCHA(JUGADORALETRA(partida->turno))
 		cambiaFichas(partida);
 	}
 	else if((difFil==2 && difCol==2) || (difFil==2 && difCol==1) ||\
@@ -472,6 +473,8 @@ void movRandomEntreIguales(tipoPartida *partida, unsigned char *vec, int dim){
 int cuentaFichasPosibles(const tipoPartida *partida){
 	int i, j, limitei, limitej, contFichas=0;
 
+	char fichaContraria = (partida->turno==1) ? 'Z' : 'A' ;
+
 	//defino los limites de donde podria ganar fichas, si se pasan los achico
 	limitei=((*partida).aFil+2);
 	if(limitei>(*partida).filas)
@@ -487,7 +490,7 @@ int cuentaFichasPosibles(const tipoPartida *partida){
 		for(j=((*partida).aCol-1); j<limitej ; j++){
 			if(j<0)
 				j=0;
-			if((*partida).tablero[i][j]=='A'){
+			if((*partida).tablero[i][j]==fichaContraria){
 				contFichas++;
 			}
 		}

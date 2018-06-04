@@ -1,13 +1,41 @@
 #include <blobsFront.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <blobsBack.h>
+
+#define LIMPIAPANTALLA clearWorkSpace()
+
+#define MINFILSYCOLS 5
+#define MAXFILSYCOLS 20
+#define MAXNOMBREARCHIVO 34
+
+#define JUGADORUNO 1
+#define JUGADORDOS 2
+
+enum{JUGADORvsJUGADOR=1, JUGADORvsCOMPUTADORA, COMPUTADORAvsCOMPUTADORA, SALIR};
+
+int menuJuego(tipoPartida *partida);
+void cantFilsyCols(tipoPartida *partida);
+int generaPartida(tipoPartida *partida);
+int jugar(tipoPartida *partida);
+void imprimeTablero(const tipoPartida *partida);
+int leeIngresado(tipoPartida *partida);
+int movimiento(tipoPartida *partida);
+void imprimeGanador(const tipoPartida *partida);
+void leeNumero(int *numero, int desdeN, int hastaN);
+void leeNombre(tipoPartida *partida);
+int siOno();
 
 int iniciarBlobWars(){
 	tipoPartida partida;
 	partida.s=malloc(MAXNOMBREARCHIVO);
 	srand(time(NULL));
 	LIMPIAPANTALLA;
-	printf("\nBienvenido a Blob Wars!!\n");
+	printf("\n!!Bienvenido a Blob Wars!!\n");
 	while(menuJuego(&partida)==1);
-	printf("\nHasta luego!\n\n");
+	printf("\n!Hasta luego!\n\n");
 	free(partida.s);
 	return 1;
 }
@@ -16,12 +44,13 @@ int menuJuego(tipoPartida *partida){
 	int opcion, flagDeExit=1, flagJuegaDeNuevo=0,\
 	flagDeError=0;\
 
-	printf("\n1. Juego de dos jugadores\n");
-	printf("2. Juego contra computadora\n");
-	printf("3. Terminar\n\n");
+	printf("\n1. Juego de jugador contra jugador\n");
+	printf("2. Juego de jugador contra computadora\n");
+	printf("3. Juego de computadora contra computadora\n");
+	printf("4. Salir\n\n");
 	printf("Elegir opcion: ");
 
-	leeNumero(&opcion, 1, 3);
+	leeNumero(&opcion, 1, 4);
 
 	while(flagDeExit==1 && flagDeError==0){
 		switch(opcion){
@@ -53,6 +82,20 @@ int menuJuego(tipoPartida *partida){
 					}
 				}
 			break;
+			case COMPUTADORAvsCOMPUTADORA:
+				(*partida).modojuego=2;
+				flagDeError=generaPartida(partida);
+				if(flagDeError==1)
+					printf("Error al intentar generar la partida.\n");
+				else{
+					flagDeExit=jugar(partida);
+					if(flagDeExit==0){
+						printf("¿Desea jugar denuevo?\n");
+						flagJuegaDeNuevo=siOno();
+						liberaTablero(partida);
+					}
+				}
+			break;
 			case SALIR:
 				flagDeExit=0;
 				flagJuegaDeNuevo=0;
@@ -64,9 +107,9 @@ int menuJuego(tipoPartida *partida){
 
 void cantFilsyCols(tipoPartida *partida){
 
-	printf("Ingrese la cantidad de filas(Minimo 5 y Maximo 10): ");
+	printf("Ingrese la cantidad de filas(Minimo %d y Maximo %d): ", MINFILSYCOLS, MAXFILSYCOLS);
 	leeNumero(&(*partida).filas, MINFILSYCOLS, MAXFILSYCOLS);
-	printf("Ingrese la cantidad de columnas(Minimo 5 y Maximo 10): ");
+	printf("Ingrese la cantidad de columnas(Minimo %d y Maximo %d): ", MINFILSYCOLS, MAXFILSYCOLS);
 	leeNumero(&(*partida).columnas, MINFILSYCOLS, MAXFILSYCOLS);
 	
 	return;
@@ -77,7 +120,7 @@ int generaPartida(tipoPartida *partida){
 
 	(*partida).manchasA=2;
 	(*partida).manchasZ=2;
-	if((*partida).modojuego==0)
+	if((*partida).modojuego==0 || (*partida).modojuego==2)
 		turnoAleatorio(partida);
 	else
 		(*partida).turno=JUGADORUNO;
@@ -92,8 +135,7 @@ int jugar(tipoPartida *partida){
 
 	//JUGADOR VS JUGADOR
 	if((*partida).modojuego==0){
-		while(flagTermina==1 && (flagTerminaAntes==LEE_Y_MUEVE ||\
-		flagTerminaAntes==GUARDA_PARTIDA))\
+		while(flagTermina==1 && flagTerminaAntes==LEE_Y_MUEVE)
 		{
 			switch((*partida).turno){
 				case JUGADORUNO:
@@ -125,8 +167,7 @@ int jugar(tipoPartida *partida){
 	//JUGADOR VS COMPUTADORA
 	else if((*partida).modojuego==1){
 		imprimeTablero(partida);
-		while(flagTermina==1 && (flagTerminaAntes==LEE_Y_MUEVE ||\
-		flagTerminaAntes==GUARDA_PARTIDA))\
+		while(flagTermina==1 && flagTerminaAntes==LEE_Y_MUEVE)
 		{
 			switch((*partida).turno){
 				case JUGADORUNO:
@@ -160,6 +201,38 @@ int jugar(tipoPartida *partida){
 		}
 	}
 
+	//COMPUTADORA VS COMPUTADORA
+	else if((*partida).modojuego==2){
+		imprimeTablero(partida);
+		while(flagTermina==1)
+		{
+			switch((*partida).turno){
+				case JUGADORUNO:
+					mueveComputadora(partida);
+					(*partida).turno=JUGADORDOS;
+					imprimeTablero(partida);
+					flagTermina=buscaLugar(partida);
+					if(flagTermina!=1){
+						llenaLugares(partida);
+						imprimeTablero(partida);
+						imprimeGanador(partida);
+					}
+				break;
+				case JUGADORDOS:
+					mueveComputadora(partida);
+					(*partida).turno=JUGADORUNO;
+					imprimeTablero(partida);
+					flagTermina=buscaLugar(partida);
+					if(flagTermina!=1){
+						llenaLugares(partida);
+						imprimeTablero(partida);
+						imprimeGanador(partida);
+					}
+				break;
+			}
+		}
+	}
+
 	if(flagTerminaAntes==SALE_Y_GUARDA || flagTerminaAntes==SALE_SIN_GUARDAR)
 		return flagTerminaAntes;
 	else
@@ -178,6 +251,10 @@ void imprimeTablero(const tipoPartida *partida){
 	else if((*partida).modojuego==1){
 		printf("Puntaje del jugador(A): %d.\n", (*partida).manchasA);
 		printf("Puntaje de la computadora(Z): %d.\n\n", (*partida).manchasZ);
+	}
+	else if((*partida).modojuego==2){
+		printf("Puntaje de la computadora 1(A): %d.\n", (*partida).manchasA);
+		printf("Puntaje de la computadora 2(Z): %d.\n\n", (*partida).manchasZ);
 	}
 
 	//imprimo los numeros de las columnas
@@ -202,6 +279,8 @@ void imprimeTablero(const tipoPartida *partida){
 					//imprimo los numeros de las filas
 					if(i>9)
 						printf("  %d #   ", i);
+					else if(i==0)
+						printf("  00 #   ");
 					else
 						printf("  0%d #   ", i);
 				}
@@ -213,6 +292,8 @@ void imprimeTablero(const tipoPartida *partida){
 					//imprimo los numeros de las filas
 					if(i>9)
 						printf("  %d # %c ", i, (*partida).tablero[i][j]);
+					else if(i==0)
+						printf("  00 # %c ", (*partida).tablero[i][j]);
 					else
 						printf("  0%d # %c ", i, (*partida).tablero[i][j]);
 				}
@@ -240,7 +321,7 @@ int leeIngresado(tipoPartida *partida){
 
 	do{
 		flagScanf = scanf("%n", s);
-		if(flagScanf==1){
+		if(flagScanf!=1){
 			printf("Error, volver a ingresar: ");
 		}
 		else
@@ -272,15 +353,14 @@ int leeIngresado(tipoPartida *partida){
 }
 
 int movimiento(tipoPartida *partida){
-	int flagMovimiento=DISTINTOEXITO, flagGuardaPartida, resultado;
+	int flagMovimiento=DISTINTOEXITO, resultado;
 
-	printf("Turno jugador %d(%c).\n", (*partida).turno,\
-	JUGADORALETRA((*partida).turno));\
+	printf("Turno jugador %d(%c). ", (*partida).turno, JUGADORALETRA((*partida).turno));
+	printf("Acciones: ");
+	printf("[ff,cc][ff,cc] ");
+	printf("o quit\n");
 
 	do{
-		printf("Acciones: ");
-		printf("[ff,cc][ff,cc] ");
-		printf("o quit\n");
 		printf("Ingrese accion: ");
 		resultado=leeIngresado(partida);
 		if(resultado==LEE_Y_MUEVE){
@@ -319,6 +399,17 @@ void imprimeGanador(const tipoPartida *partida){
 		}
 		else if((*partida).manchasZ==(*partida).manchasA){
 			printf("Felicitaciones la partida ha terminado en un empate!\n");
+		}
+	}
+		else if((*partida).modojuego==2){
+		if((*partida).manchasA>(*partida).manchasZ){
+			printf("La computadora 1(A) ha ganado!\n");
+		}
+		else if((*partida).manchasZ>(*partida).manchasA){
+			printf("La computadora 2(Z) ha ganado!\n");
+		}
+		else if((*partida).manchasZ==(*partida).manchasA){
+			printf("La partida ha terminado en un empate!\n");
 		}
 	}
 
