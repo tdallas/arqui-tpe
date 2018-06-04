@@ -1,5 +1,9 @@
 #include <stdio.h>
 
+static unsigned int R = 255;
+static unsigned int G = 255;
+static unsigned int B = 255;
+
 int abs(int a)
 {
     if (a < 0)
@@ -9,9 +13,26 @@ int abs(int a)
     return a;
 }
 
+void putPixel(unsigned int x, unsigned int y)
+{
+    systemCall(7, (uint64_t)x, (uint64_t)y, (uint64_t)R, (uint64_t)G, (uint64_t)B);
+}
+
 void clearWorkSpace()
 {
     systemCall(5, 0, 0, 0, 0, 0);
+}
+
+void setBackGroundColor(unsigned int red, unsigned int blue, unsigned int green)
+{
+    systemCall(6, (uint64_t)red, (uint64_t)blue, (uint64_t)green, 0, 0);
+}
+
+void setCharColor(unsigned int red, unsigned int blue, unsigned int green)
+{
+    R = red;
+    G = green;
+    B = blue;
 }
 
 int getchar()
@@ -19,10 +40,10 @@ int getchar()
     return systemCall(1, 0, 0, 0, 0, 0);
 }
 
-void putchar(char c)
+void putchar(unsigned char c)
 {
     if (c != 0)
-        systemCall(2, (uint64_t)c, (uint64_t)255, (uint64_t)255, (uint64_t)255, 0);
+        systemCall(2, (uint64_t)c, (uint64_t)R, (uint64_t)G, (uint64_t)B, 0);
 }
 
 void *malloc(long unsigned int size)
@@ -43,7 +64,7 @@ int printf(const char *str, ...)
 {
     va_list arguments;
     va_start(arguments, str);
-        char num[INT_BUFFER_SIZE];
+    char num[INT_BUFFER_SIZE];
     int strIndex = 0;
     while (str[strIndex] != '\0')
     {
@@ -190,7 +211,7 @@ int scanf(const char *format, ...)
     char *auxChar;
     int *auxNum;
 
-    while (format[formatIndex] != '\0' && buffer[bufferIndex] !='\0' && !flag)
+    while (format[formatIndex] != '\0' && buffer[bufferIndex] != '\0' && !flag)
     {
         if (format[formatIndex] != '%')
         {
@@ -224,26 +245,30 @@ int scanf(const char *format, ...)
                 auxNum = va_arg(args, int *);
                 auxIndex = bufferIndex;
                 bufferIndex += stringToInt(buffer + bufferIndex, auxNum);
-                if(bufferIndex > auxIndex){
+                if (bufferIndex > auxIndex)
+                {
                     result++;
                 }
-                else{
+                else
+                {
                     flag = 1;
                 }
                 formatIndex++;
                 break;
             case 'c':
                 auxChar = va_arg(args, char *);
-                if(isAlpha(buffer[bufferIndex])){
+                if (isAlpha(buffer[bufferIndex]))
+                {
                     *auxChar = buffer[bufferIndex++];
                     result++;
                 }
-                else{
+                else
+                {
                     flag = 1;
                 }
                 formatIndex++;
                 break;
-            case 's':  //String hasta espacio
+            case 's': //String hasta espacio
                 auxChar = va_arg(args, char *);
                 auxIndex = bufferIndex;
                 while (!isSpace(buffer[bufferIndex]) && buffer[bufferIndex] != '\0')
@@ -252,29 +277,33 @@ int scanf(const char *format, ...)
                     auxChar++;
                     bufferIndex++;
                 }
-                if(bufferIndex > auxIndex){
+                if (bufferIndex > auxIndex)
+                {
                     auxChar[auxIndex] = '\0';
                     result++;
                 }
-                else{
+                else
+                {
                     flag = 1;
                 }
                 formatIndex++;
                 break;
-            case 'n':  //String hasta el enter
+            case 'n': //String hasta el enter
                 auxChar = va_arg(args, char *);
                 auxIndex = bufferIndex;
-                while (buffer[bufferIndex] !='\0')
+                while (buffer[bufferIndex] != '\0')
                 {
                     *auxChar = buffer[bufferIndex];
                     auxChar++;
                     bufferIndex++;
                 }
-                if(bufferIndex > auxIndex){
+                if (bufferIndex > auxIndex)
+                {
                     auxChar[auxIndex] = '\0';
                     result++;
                 }
-                else{
+                else
+                {
                     flag = 1;
                 }
                 formatIndex++;
@@ -283,7 +312,8 @@ int scanf(const char *format, ...)
         }
     }
 
-    if(flag || (format[formatIndex] == '\0' && buffer[bufferIndex] != '\0')){
+    if (flag || (format[formatIndex] == '\0' && buffer[bufferIndex] != '\0'))
+    {
         return 0;
     }
 
