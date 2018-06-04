@@ -1,9 +1,8 @@
 #include <stdint.h>
 #include <lib.h>
 #include <moduleLoader.h>
-#include <naiveConsole.h>
 #include <idtLoader.h>
-#include <time.h>
+#include <videoDriver.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -26,90 +25,26 @@ void clearBSS(void *bssAddress, uint64_t bssSize)
 
 void *getStackBase()
 {
-	return (void *)((uint64_t)&endOfKernel + PageSize * 8 //The size of the stack itself, 32KiB
-					- sizeof(uint64_t)					  //Begin at the top of the stack
-	);
+	return (void *)((uint64_t)&endOfKernel + PageSize * 8 - sizeof(uint64_t));
 }
 
 void *initializeKernelBinary()
 {
-	char buffer[10];
-
-	ncPrint("[x64BareBones]");
-	ncNewline();
-
-	ncPrint("CPU Vendor:");
-	ncPrint(cpuVendor(buffer));
-	ncNewline();
-
-	ncPrint("[Loading modules]");
-	ncNewline();
 	void *moduleAddresses[] = {
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress};
 
 	loadModules(&endOfKernelBinary, moduleAddresses);
-	ncPrint("[Done]");
-	ncNewline();
-	ncNewline();
-
-	ncPrint("[Initializing kernel's binary]");
-	ncNewline();
-
 	clearBSS(&bss, &endOfKernel - &bss);
 
-	ncPrint("  text: 0x");
-	ncPrintHex((uint64_t)&text);
-	ncNewline();
-	ncPrint("  rodata: 0x");
-	ncPrintHex((uint64_t)&rodata);
-	ncNewline();
-	ncPrint("  data: 0x");
-	ncPrintHex((uint64_t)&data);
-	ncNewline();
-	ncPrint("  bss: 0x");
-	ncPrintHex((uint64_t)&bss);
-	ncNewline();
-
-	ncPrint("[Done]");
-	ncNewline();
-	ncNewline();
 	return getStackBase();
 }
 
 int main()
 {
-	ncPrint("[IDT Loader]");
-	ncNewline();
-
-	ncPrint("  Loading instructions...");
-	load_idt(); //Carga instrucciones
-	ncPrint("  Done.");
-	
-	ncNewline();
-	ncPrint("[Finished]");
-	ncNewline();
-	ncNewline();
-
-	ncPrint("[Kernel Main]");
-	ncNewline();
-	ncPrint("  Sample code module at 0x");
-	ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	ncNewline();
-
-	ncPrint("  Sample data module at 0x");
-	ncPrintHex((uint64_t)sampleDataModuleAddress);
-	ncNewline();
-
-	ncPrint("[Finished]");
-	ncNewline();
-	ncNewline();
-
-	ncPrint("System booting in 2 seconds...");
-	seconds_delay(2);
-	ncClear();
+	load_idt();
 	speakerBeep();
-
+	printBackGround();
 	((EntryPoint)sampleCodeModuleAddress)();
 
 	return 0;

@@ -7,6 +7,5 @@
 extern int getKeyCode();
 int getChar();
 void keyboard_handler();
-void putCharBuffer(int c);
 
 #endif

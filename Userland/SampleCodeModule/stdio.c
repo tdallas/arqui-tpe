@@ -22,7 +22,7 @@ int getchar()
 void putchar(char c)
 {
     if (c != 0)
-        systemCall(2, (uint64_t)c, 0, 0, 0, 0);
+        systemCall(2, (uint64_t)c, (uint64_t)255, (uint64_t)255, (uint64_t)255, 0);
 }
 
 void *malloc(long unsigned int size)
@@ -159,7 +159,7 @@ int readLine(char buffer[BUFFER_SIZE])
                 putchar('\b');
             }
         }
-        else if (c != EOF)
+        else if (c != EOF && c > 31)
         {
             if (bufferIndex <= BUFFER_SIZE)
             {
