@@ -51,7 +51,7 @@ void managingCases(char *option)
 
 void printingMenu()
 {
-    clearScreen();
+    //clearScreen();
     printf("                            \n");
     printf("                           Welcome to Titanium Kernel!\n");
     printf("                            \n");

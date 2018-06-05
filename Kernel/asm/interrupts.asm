@@ -16,6 +16,7 @@ GLOBAL _systemCallHandler
 EXTERN systemCallDispatcher
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
+EXTERN seconds_delay
 
 SECTION .text
 
@@ -76,6 +77,8 @@ SECTION .text
 	call exceptionDispatcher
 
 	popState
+
+	mov qword [rsp], 0x400000 ;Despues de la excepcion que vuelva a el modulo que esta en 0x400000
 	iretq
 %endmacro
 

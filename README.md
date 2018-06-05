@@ -1,37 +1,37 @@
 # TPE -  Arquitectura de Computadoras 2018
-Sistema Basado en x64BareBones para la arquitectura Intel 64.
+System based in x64BareBones for the architecture Intel 64.
 
-## Para ejecutar el proyecto:
+## To run the proyect:
 
-1- Instalar los siguientes paquetes antes de armar el Toolchain y Kernel:
+1- Install the following packages before building the Toolchain and Kernel:
 
 ```
 sudo apt-get install nasm qemu gcc make
 ```
 
-2- Armar la Toolchain
+2- Build the Toolchain
 
-Ejecutar los siguientes comandos desde el directorio del repositorio:
+Run the following commands from the repository directory:
 ```
 cd Toolchain
 make all
 ```
 
-3- Armar el Kernel
+3- Build the Kernel
 
-Desde el directorio del repositorio realizar:
+From the repository directory:
 ```
 make all
 ```
 
-4- Ejecutar el Kernel
+4- Run the Kernel
 
-Desde el directorio del repositorio realizar:
+From the directory repository:
 ```
 ./run.sh
 ```
 
-## Desde el sistema ejecutar el siguiente comando para ver sus utilidades:
+## From the system run the following command:
 ```
 help
 ```
