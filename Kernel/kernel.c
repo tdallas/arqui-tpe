@@ -3,6 +3,7 @@
 #include <moduleLoader.h>
 #include <idtLoader.h>
 #include <videoDriver.h>
+#include <time.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -43,7 +44,9 @@ void *initializeKernelBinary()
 int main()
 {
 	load_idt();
-	speakerBeep();
+	speakerOn();
+	ticks_delay(1);
+	speakerOff();
 	printBackGround();
 	((EntryPoint)sampleCodeModuleAddress)();
 

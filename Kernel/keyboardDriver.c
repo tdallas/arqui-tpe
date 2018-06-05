@@ -2,8 +2,6 @@
 
 #define IS_ALPHA(C) (C >= 'a' && C <= 'z')
 
-static int keyboardType = 0;
-
 static const char keyMap[128] =
     {
         0, 27, '1', '2', '3', '4', '5', '6', '7', '8',                   /* 9 */
@@ -76,8 +74,6 @@ static int writeIndex = 0;
 static int elements = 0;
 
 static int shiftKey = 0;
-static int altKey = 0;
-static int controlKey = 0;
 static int capsKey = 0;
 
 void keyboard_handler()
@@ -85,19 +81,11 @@ void keyboard_handler()
   unsigned char keyCode;
   keyCode = getKeyCode();
 
-  if (keyCode & 0x80)
+  if (keyCode & 0x80) //Si acaba de soltar la tecla
   {
-    if (keyCode == 182 || keyCode == 170)
+    if (keyCode == 182 || keyCode == 170) //Ambos shift
     {
       shiftKey = 0;
-    }
-    else if (keyCode == 157)
-    {
-      controlKey = 0;
-    }
-    else if (keyCode == 184)
-    {
-      altKey = 0;
     }
   }
   else
@@ -106,40 +94,25 @@ void keyboard_handler()
     {
       capsKey = !capsKey;
     }
-    else if (keyCode == 54 || keyCode == 42)
+    else if (keyCode == 54 || keyCode == 42) //Ambos shift
     {
       shiftKey = 1;
     }
-    else if (keyCode == 29)
-    {
-      controlKey = 1;
-    }
-    else if (keyCode == 56)
-    {
-      altKey = 1;
-    }
-    char c;
-    if(keyboardType == 0){
-      c = keyMap[keyCode];
-    }
+    char c = keyMap[keyCode];
     if (c != 0)
     {
       if (shiftKey)
       {
         if (!IS_ALPHA(c) || !capsKey)
         {
-          if(keyboardType == 0){
-            c = shiftKeyMap[keyCode];
-          }
+          c = shiftKeyMap[keyCode];
         }
       }
       else
       {
         if (IS_ALPHA(c) && capsKey)
         {
-          if(keyboardType == 0){
-            c = shiftKeyMap[keyCode];
-          }
+          c = shiftKeyMap[keyCode];
         }
       }
       buffer[writeIndex] = c;

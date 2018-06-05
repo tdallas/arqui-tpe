@@ -2,6 +2,8 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 #include <lib.h>
+#include <time.h>
+#include <idtLoader.h>
 
 static uint64_t getTime(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t readChar(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
@@ -49,7 +51,10 @@ static uint64_t writeChar(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8,
 
 static uint64_t beepSound(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
-	speakerBeep();
+	load_idt(); 
+	speakerOn();
+	ticks_delay(1);
+	speakerOff();
 	return 1;
 }
 
