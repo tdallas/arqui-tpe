@@ -41,7 +41,7 @@ void clearWorkSpace()
 
 void setBackGroundColor(unsigned int red, unsigned int green, unsigned int blue)
 {
-    systemCall(6, (uint64_t)red, (uint64_t)blue, (uint64_t)green, 0, 0);
+    systemCall(6, (uint64_t)red, (uint64_t)green, (uint64_t)blue, 0, 0);
 }
 
 void setCharColor(unsigned int red, unsigned int green, unsigned int blue)
