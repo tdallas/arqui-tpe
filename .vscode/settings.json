@@ -10,6 +10,7 @@
         "blobsback.h": "c",
         "moduleloader.h": "c",
         "shell.h": "c",
-        "digitaltime.h": "c"
+        "digitaltime.h": "c",
+        "videodriver.h": "c"
     }
 }

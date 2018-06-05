@@ -8,12 +8,13 @@
 #include <digitalTime.h>
 
 void shell();
-void managingCases(char *option);
+int managingCases(char *option);
 void help();
-void exceptions(int code);
+void info();
 void displayTime();
-void blobwars();
-void printingMenu();
+int changeTextColor(char *color);
+int changeBackGroundColor(char *color);
+int wichColor(char *color);
 
 extern int opCode();
 extern int zeroDiv();

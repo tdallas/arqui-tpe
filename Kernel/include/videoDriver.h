@@ -54,5 +54,10 @@ void printBackGround();
 void setBackGroundColor(unsigned char R, unsigned char G, unsigned char B);
 int paintPixelBackGroundColor(unsigned int x, unsigned int y);
 void printString(const char *str, unsigned char R, unsigned char G, unsigned char B);
+void printDec(uint64_t value);
+void printHex(uint64_t value);
+void printBin(uint64_t value);
+void printBase(uint64_t value, uint32_t base);
+uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 
 #endif

@@ -1,6 +1,7 @@
 #include <videoDriver.h>
 
 static vbe *vbeStruct = (vbe *)0x0000000000005C00; //Sacado de sysvar.asm en Bootloader/Pure64/src
+static char buffer[64] = {0};
 static unsigned int actualX = 0;
 static unsigned int actualY = 0;
 static unsigned char backgroundR = 0;
@@ -128,7 +129,7 @@ void printBackGround()
 	{
 		for (int x = 0; x < vbeStruct->width; x++)
 		{
-			printPixel(x, y, backgroundB, backgroundG, backgroundR);
+			printPixel(x, y, backgroundR, backgroundG, backgroundB);
 		}
 	}
 	actualX = 0;
@@ -154,4 +155,57 @@ void printString(const char *str, unsigned char R, unsigned char G, unsigned cha
 	{
 		printChar(str[i++], R, G, B);
 	}
+}
+
+void printDec(uint64_t value)
+{
+	printBase(value, 10);
+}
+
+void printHex(uint64_t value)
+{
+	printBase(value, 16);
+}
+
+void printBin(uint64_t value)
+{
+	printBase(value, 2);
+}
+
+void printBase(uint64_t value, uint32_t base)
+{
+	uintToBase(value, buffer, base);
+	printString(buffer, 255, 255, 255);
+}
+
+uint32_t uintToBase(uint64_t value, char *buffer, uint32_t base)
+{
+	char *p = buffer;
+	char *p1, *p2;
+	uint32_t digits = 0;
+
+	//Calculate characters for each digit
+	do
+	{
+		uint32_t remainder = value % base;
+		*p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
+		digits++;
+	} while (value /= base);
+
+	// Terminate string in buffer.
+	*p = 0;
+
+	//Reverse string in buffer.
+	p1 = buffer;
+	p2 = p - 1;
+	while (p1 < p2)
+	{
+		char tmp = *p1;
+		*p1 = *p2;
+		*p2 = tmp;
+		p1++;
+		p2--;
+	}
+
+	return digits;
 }

@@ -73,12 +73,13 @@ SECTION .text
 %macro exceptionHandler 1
 	pushState
 
-	mov rdi, %1 ; pasaje de parametro
+	mov rdi, %1 ; pasaje de parametro nro de excepcion
+	mov rsi, rsp ; pasaje de registros como estan pusheados
+
 	call exceptionDispatcher
 
 	popState
 
-	call load_idt
 	mov qword [rsp], 0x400000 ;Despues de la excepcion que vuelva a el modulo que esta en 0x400000 que es SampleCodeModule
 	iretq
 %endmacro

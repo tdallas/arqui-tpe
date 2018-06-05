@@ -39,12 +39,12 @@ void clearWorkSpace()
     systemCall(5, 0, 0, 0, 0, 0);
 }
 
-void setBackGroundColor(unsigned int red, unsigned int blue, unsigned int green)
+void setBackGroundColor(unsigned int red, unsigned int green, unsigned int blue)
 {
     systemCall(6, (uint64_t)red, (uint64_t)blue, (uint64_t)green, 0, 0);
 }
 
-void setCharColor(unsigned int red, unsigned int blue, unsigned int green)
+void setCharColor(unsigned int red, unsigned int green, unsigned int blue)
 {
     charR = red;
     charG = green;
@@ -121,19 +121,24 @@ int sscanf(const char *str, const char *format, ...)
 {
     va_list args;
     va_start(args, format);
+
     int strIndex = 0;
     int formatIndex = 0;
-    int n = 0;
-    char *character;
-    int *num;
 
-    while (format[formatIndex] != '\0')
+    int result = 0;
+    int flag = 0;
+    int auxIndex;
+
+    char *auxChar;
+    int *auxNum;
+
+    while (format[formatIndex] != '\0' && str[strIndex] != '\0' && !flag)
     {
         if (format[formatIndex] != '%')
         {
             if (format[formatIndex] != str[strIndex])
             {
-                return n;
+                flag = 1;
             }
             else
             {
@@ -143,42 +148,101 @@ int sscanf(const char *str, const char *format, ...)
         }
         else
         {
-            switch (format[++formatIndex])
+            formatIndex++;
+            switch (format[formatIndex])
             {
-            case '%':
+            default:
                 if (str[strIndex] != '%')
-                    return n;
+                {
+                    flag = 1;
+                }
                 else
+                {
                     strIndex++;
+                }
                 break;
             case 'd':
             case 'i':
-                num = va_arg(args, int *);
-                strIndex += stringToInt(str + strIndex, num);
-                n++;
+                auxNum = va_arg(args, int *);
+                auxIndex = strIndex;
+                strIndex += stringToInt(str + strIndex, auxNum);
+                if (strIndex > auxIndex)
+                {
+                    result++;
+                }
+                else
+                {
+                    flag = 1;
+                }
+                formatIndex++;
                 break;
             case 'c':
-                character = va_arg(args, char *);
-                *character = str[strIndex++];
-                n++;
+                auxChar = va_arg(args, char *);
+                if (isAlpha(str[strIndex]))
+                {
+                    *auxChar = str[strIndex++];
+                    result++;
+                }
+                else
+                {
+                    *auxChar = '\0';
+                    flag = 1;
+                }
+                formatIndex++;
                 break;
-            case 's':
-                character = va_arg(args, char *);
+            case 's': //String hasta espacio
+                auxChar = va_arg(args, char *);
+                auxIndex = strIndex;
                 while (!isSpace(str[strIndex]) && str[strIndex] != '\0')
                 {
-                    *character = str[strIndex];
-                    character++;
+                    *auxChar = str[strIndex];
+                    auxChar++;
                     strIndex++;
                 }
-                *character = '\0';
-                n++;
+                if (strIndex > auxIndex)
+                {
+                    auxChar[auxIndex] = '\0';
+                    result++;
+                }
+                else
+                {
+                    auxChar[auxIndex] = '\0';
+                    flag = 1;
+                }
+                formatIndex++;
+                break;
+            case 'n': //String hasta el enter
+                auxChar = va_arg(args, char *);
+                auxIndex = strIndex;
+                while (str[strIndex] != '\0')
+                {
+                    *auxChar = str[strIndex];
+                    auxChar++;
+                    strIndex++;
+                }
+                if (strIndex > auxIndex)
+                {
+                    auxChar[auxIndex] = '\0';
+                    result++;
+                }
+                else
+                {
+                    auxChar[auxIndex] = '\0';
+                    flag = 1;
+                }
+                formatIndex++;
+                break;
             }
-            formatIndex++;
         }
     }
 
+    if (flag || (format[formatIndex] == '\0' && str[strIndex] != '\0'))
+    {
+        return 0;
+    }
+
     va_end(args);
-    return n;
+    return result;
 }
 
 int readLine(char buffer[BUFFER_SIZE])
