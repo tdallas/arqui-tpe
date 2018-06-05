@@ -28,7 +28,7 @@ void load_idt()
 
   //Exceptions
   setup_IDT_entry(0x00, (uint64_t)&_exception0Handler); // Zero Divition
-  setup_IDT_entry(0x01, (uint64_t)&_exception1Handler); // Invalid Operation Code
+  setup_IDT_entry(0x06, (uint64_t)&_exception1Handler); // Invalid Operation Code
 
   //Interruptions
   setup_IDT_entry(0x20, (uint64_t)&_irq00Handler); // Timer

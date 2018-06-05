@@ -123,7 +123,7 @@ _exception0Handler:
 
 ;Invalid Code Exception
 _exception1Handler:
-	exceptionHandler 1
+	exceptionHandler 6
 
 ;System Calls
 _systemCallHandler:

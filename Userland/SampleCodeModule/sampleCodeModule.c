@@ -5,11 +5,14 @@
 
 void managingCases(char *);
 void help();
-void exceptions();
+void exceptions(int code);
 void displayTime();
 void blobwars();
 void printingMenu();
 void clearScreen();
+
+extern opcodeGenerator();
+extern _div0();
 
 int main()
 {
@@ -41,9 +44,13 @@ void managingCases(char *option)
     {
         blobwars();
     }
-    else if (strcmp(option, "exceptions") == 0)
+    else if (strcmp(option, "exceptionsZero") == 0)
     {
-        exceptions();
+        exceptions(0);
+    }
+    else if (strcmp(option, "exceptionsOpCode") == 0)
+    {
+        exceptions(6);
     }
     else if (strcmp(option, "b") == 0) {
         printingMenu();
@@ -63,7 +70,8 @@ void printingMenu()
     printf("                                For Help, write help\n");
     printf("                  If you want to display time, write displayTime\n");
     printf("               If you want to play Blobwars (you should), write blobWars\n");
-    printf("                                 Exceptions?, write exceptions\n");
+    printf("              Write exceptionsZero for trying our divZero exception catch\n");
+    printf("              Write exceptionsOpCode for trying our opCode exception catch\n");
     printf("                           If you want to exit, write exit\n");
     printf("                            \n");
     printf("                            \n");
@@ -104,9 +112,12 @@ void displayTime()
     printTimeUTC();
 }
 
-void exceptions()
+void exceptions(int code)
 {
-    printf("YOU WANT TO SEE EXCEPTIONS\n");
+    if (code == 6)
+        opcodeGenerator();
+    else
+        _div0();
 }
 
 void blobwars()
