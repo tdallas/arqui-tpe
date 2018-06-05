@@ -1,8 +1,12 @@
 #include <stdio.h>
 
-static unsigned int R = 255;
-static unsigned int G = 255;
-static unsigned int B = 255;
+static unsigned int charR = 255;
+static unsigned int charG = 255;
+static unsigned int charB = 255;
+static unsigned int pixelR = 255;
+static unsigned int pixelG = 255;
+static unsigned int pixelB = 255;
+static char buffer[BUFFER_SIZE];
 
 int abs(int a)
 {
@@ -15,7 +19,7 @@ int abs(int a)
 
 void putPixel(unsigned int x, unsigned int y)
 {
-    systemCall(7, (uint64_t)x, (uint64_t)y, (uint64_t)R, (uint64_t)G, (uint64_t)B);
+    systemCall(7, (uint64_t)x, (uint64_t)y, (uint64_t)pixelR, (uint64_t)pixelG, (uint64_t)pixelB);
 }
 
 void clearWorkSpace()
@@ -30,9 +34,9 @@ void setBackGroundColor(unsigned int red, unsigned int blue, unsigned int green)
 
 void setCharColor(unsigned int red, unsigned int blue, unsigned int green)
 {
-    R = red;
-    G = green;
-    B = blue;
+    charR = red;
+    charG = green;
+    charB = blue;
 }
 
 int getchar()
@@ -43,7 +47,7 @@ int getchar()
 void putchar(unsigned char c)
 {
     if (c != 0)
-        systemCall(2, (uint64_t)c, (uint64_t)R, (uint64_t)G, (uint64_t)B, 0);
+        systemCall(2, (uint64_t)c, (uint64_t)charR, (uint64_t)charG, (uint64_t)charB, 0);
 }
 
 void *malloc(long unsigned int size)
@@ -199,7 +203,6 @@ int scanf(const char *format, ...)
     va_list args;
     va_start(args, format);
 
-    char buffer[BUFFER_SIZE];
     readLine(buffer);
     int bufferIndex = 0;
     int formatIndex = 0;
@@ -264,6 +267,7 @@ int scanf(const char *format, ...)
                 }
                 else
                 {
+                    *auxChar = '\0';
                     flag = 1;
                 }
                 formatIndex++;
@@ -284,6 +288,7 @@ int scanf(const char *format, ...)
                 }
                 else
                 {
+                    auxChar[auxIndex] = '\0';
                     flag = 1;
                 }
                 formatIndex++;
@@ -304,6 +309,7 @@ int scanf(const char *format, ...)
                 }
                 else
                 {
+                    auxChar[auxIndex] = '\0';
                     flag = 1;
                 }
                 formatIndex++;

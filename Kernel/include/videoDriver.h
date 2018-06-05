@@ -44,15 +44,15 @@ typedef struct vbe_mode_info_structure
 	uint8_t reserved1[206];
 } __attribute__((packed)) vbe;
 
-
-unsigned char *getFrameBuffer();
-void printPixel(unsigned int x, unsigned int y, unsigned char R, unsigned char G, unsigned char B);
+int setActualPixel(unsigned int x, unsigned int y);
+int printPixel(unsigned int x, unsigned int y, unsigned char R, unsigned char G, unsigned char B);
 void printChar(unsigned char c, unsigned char R, unsigned char G, unsigned char B);
 void newLine();
 void shiftScreen();
 void backSpace();
 void printBackGround();
 void setBackGroundColor(unsigned char R, unsigned char G, unsigned char B);
+int paintPixelBackGroundColor(unsigned int x, unsigned int y);
 void printString(const char *str, unsigned char R, unsigned char G, unsigned char B);
 
 #endif

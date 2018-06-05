@@ -143,7 +143,7 @@ speakerBeep:
 	push rax
 	push rcx
 
-	mov rax, 0x0000000000000C80
+	mov rax, 0x0000000000000C80  ;Frequency for beep
 	call speakerOn
 
 	push rdi

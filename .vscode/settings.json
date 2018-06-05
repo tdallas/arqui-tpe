@@ -8,6 +8,7 @@
         "string.h": "c",
         "stdlib.h": "c",
         "blobsback.h": "c",
-        "moduleloader.h": "c"
+        "moduleloader.h": "c",
+        "shell.h": "c"
     }
 }

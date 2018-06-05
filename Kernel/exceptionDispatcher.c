@@ -16,10 +16,12 @@ void exceptionDispatcher(int exception)
 
 static void zero_division()
 {
-	printString("ERROR: Division by zero exception.", 255, 255, 255);
+	char str[] = "ERROR: Division by zero exception.\0";
+	printString(str, 255, 255, 255);
 }
 
 static void invalid_op_code()
 {
-	printString("ERROR: Invalid opcode exception.", 255, 255, 255);
+	char str[] = "ERROR: Invalid opcode exception.\0";
+	printString(str, 255, 255, 255);
 }

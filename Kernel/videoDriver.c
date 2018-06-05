@@ -7,22 +7,29 @@ static unsigned char backgroundR = 0;
 static unsigned char backgroundG = 0;
 static unsigned char backgroundB = 0;
 
-unsigned char *getFrameBuffer()
+int setActualPixel(unsigned int x, unsigned int y)
 {
-	unsigned char *result = 0;
-	result += vbeStruct->framebuffer;
-	return result;
+	if (x >= 0 && x <= vbeStruct->width && y >= 0 && y <= vbeStruct->height)
+	{
+		actualX = x;
+		actualY = y;
+		return 1;
+	}
+	return 0;
 }
 
-void printPixel(unsigned int x, unsigned int y, unsigned char R, unsigned char G, unsigned char B)
+int printPixel(unsigned int x, unsigned int y, unsigned char R, unsigned char G, unsigned char B)
 {
-	if (((x >= 0) && (x <= vbeStruct->width) && (y >= 0) && (y <= vbeStruct->height)))
+	if (x >= 0 && x <= vbeStruct->width && y >= 0 && y <= vbeStruct->height)
 	{
-		unsigned char *pixel = getFrameBuffer() + 3 * (x + y * vbeStruct->width);
+		unsigned char *pixel = 0;
+		pixel += vbeStruct->framebuffer + 3 * (x + y * vbeStruct->width);
 		*pixel = B;
 		*(pixel + 1) = G;
 		*(pixel + 2) = R;
+		return 1;
 	}
+	return 0;
 }
 
 void printChar(unsigned char c, unsigned char R, unsigned char G, unsigned char B)
@@ -35,15 +42,11 @@ void printChar(unsigned char c, unsigned char R, unsigned char G, unsigned char 
 	{
 		newLine();
 	}
-	else if (c == '\t')
-	{
-		printString("    ", R, G, B);
-	}
 	else if (c == '\b')
 	{
 		backSpace();
 	}
-	else
+	else if (c > 31)
 	{
 		if (actualX >= vbeStruct->width)
 		{
@@ -86,8 +89,9 @@ void newLine()
 
 void shiftScreen()
 {
-	unsigned char *video = getFrameBuffer();
-	memcpy(video, video + 3 * vbeStruct->width * FONT_HEIGHT, 3 * vbeStruct->width * (vbeStruct->height - FONT_HEIGHT));
+	unsigned char *frameBuffer = 0;
+	frameBuffer += vbeStruct->framebuffer;
+	memcpy(frameBuffer, frameBuffer + 3 * vbeStruct->width * FONT_HEIGHT, 3 * vbeStruct->width * (vbeStruct->height - FONT_HEIGHT));
 	for (int y = actualY; y < vbeStruct->height; y++)
 	{
 		for (int x = 0; x < vbeStruct->width; x++)
@@ -110,7 +114,7 @@ void backSpace()
 			}
 		}
 	}
-	else if (actualX == 0 && actualY != 0)
+	else if (actualX == 0 && actualY >= FONT_HEIGHT)
 	{
 		actualY -= FONT_HEIGHT;
 		actualX = vbeStruct->width;
@@ -131,10 +135,16 @@ void printBackGround()
 	actualY = 0;
 }
 
-void setBackGroundColor(unsigned char R, unsigned char G, unsigned char B){
+void setBackGroundColor(unsigned char R, unsigned char G, unsigned char B)
+{
 	backgroundR = R;
 	backgroundG = G;
 	backgroundB = B;
+}
+
+int paintPixelBackGroundColor(unsigned int x, unsigned int y)
+{
+	return printPixel(x, y, backgroundR, backgroundG, backgroundB);
 }
 
 void printString(const char *str, unsigned char R, unsigned char G, unsigned char B)
