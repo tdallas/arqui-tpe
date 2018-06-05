@@ -11,8 +11,8 @@ void blobwars();
 void printingMenu();
 void clearScreen();
 
-extern opcodeGenerator();
-extern _div0();
+extern opCode();
+extern zeroDiv();
 
 int main()
 {
@@ -115,9 +115,9 @@ void displayTime()
 void exceptions(int code)
 {
     if (code == 6)
-        opcodeGenerator();
+        opCode();
     else
-        _div0();
+        zeroDiv();
 }
 
 void blobwars()
