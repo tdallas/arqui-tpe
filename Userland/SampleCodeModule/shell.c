@@ -185,7 +185,7 @@ int changeTextColor(char *color)
         setCharColor(0, 0, 255);
         break;
     }
-    return number > 0;
+    return number >= 0;
 }
 
 int changeBackGroundColor(char *color)
@@ -212,7 +212,7 @@ int changeBackGroundColor(char *color)
         setBackGroundColor(0, 0, 255);
         break;
     }
-    return number > 0;
+    return number >= 0;
 }
 
 int wichColor(char *color)
