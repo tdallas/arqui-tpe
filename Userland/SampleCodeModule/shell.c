@@ -29,8 +29,8 @@ int managingCases(char *option)
     else if (strncmp(option, "setTimeZone ", 11) == 0)
     {
         int newTimeZone;
-        int count = sscanf(option, "setTimeZone %d", &newTimeZone);
-        if (count == 1)
+        int correct = sscanf(option, "setTimeZone %d", &newTimeZone);
+        if (correct == 1)
         {
             setTimeUTC(newTimeZone);
             printTimeUTC();
@@ -59,6 +59,20 @@ int managingCases(char *option)
         {
             clearWorkSpace();
             printf("Color changed!\n");
+        }
+        else
+        {
+            printf("Invalid input! For help write help.\n");
+        }
+    }
+    else if (strncmp(option, "echo ", 4) == 0)
+    {
+        char buffer[BUFFER_SIZE];
+        int correct = sscanf(option, "echo %n", buffer);
+        if (correct == 1)
+        {
+            printf(buffer);
+            printf("\n");
         }
         else
         {
