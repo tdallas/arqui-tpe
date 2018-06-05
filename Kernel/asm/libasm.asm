@@ -5,8 +5,6 @@ GLOBAL speakerBeep
 GLOBAL speakerOn
 GLOBAL speakerOff
 
-EXTERN ticks_delay
-
 SECTION .text
 
 ; -----------------------------------------------------------------------------
@@ -145,11 +143,6 @@ speakerBeep:
 
 	mov rax, 0x0000000000000C80  ;Frequency for beep
 	call speakerOn
-
-	push rdi
-	mov rdi, 4		; A quarter of a second delay
-	call ticks_delay
-	pop rdi
 
 	call speakerOff
 

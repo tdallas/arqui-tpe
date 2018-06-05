@@ -16,7 +16,7 @@ GLOBAL _systemCallHandler
 EXTERN systemCallDispatcher
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
-EXTERN seconds_delay
+EXTERN load_idt
 
 SECTION .text
 
@@ -78,7 +78,8 @@ SECTION .text
 
 	popState
 
-	mov qword [rsp], 0x400000 ;Despues de la excepcion que vuelva a el modulo que esta en 0x400000
+	call load_idt
+	mov qword [rsp], 0x400000 ;Despues de la excepcion que vuelva a el modulo que esta en 0x400000 que es SampleCodeModule
 	iretq
 %endmacro
 

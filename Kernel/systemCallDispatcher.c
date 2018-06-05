@@ -70,7 +70,7 @@ static uint64_t setBackGround(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t
 
 static uint64_t writePixel(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
-	return printPixel((unsigned char)rsi, (unsigned char)rdx, (unsigned char)rcx, (unsigned char)r8, (unsigned char)r9);
+	return printPixel((unsigned int)rsi, (unsigned int)rdx, (unsigned char)rcx, (unsigned char)r8, (unsigned char)r9);
 }
 
 static uint64_t setPixel(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)

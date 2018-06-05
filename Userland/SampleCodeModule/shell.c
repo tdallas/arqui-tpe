@@ -23,6 +23,9 @@ void managingCases(char *option)
     {
         help();
     }
+    else if(strcmp(option, "displayDigitalTime") == 0){
+        startDigitalTime();
+    }
     else if (strcmp(option, "displayTime") == 0)
     {
         displayTime();
@@ -51,12 +54,12 @@ void managingCases(char *option)
 
 void printingMenu()
 {
-    //clearScreen();
     printf("                            \n");
     printf("                           Welcome to Titanium Kernel!\n");
     printf("                            \n");
     printf("                                For Help, write help\n");
     printf("                  If you want to display time, write displayTime\n");
+    printf("           If you want to display the digital time, write displayDigitalTime\n");
     printf("               If you want to play Blobwars (you should), write blobWars\n");
     printf("              Write exceptionsZero for trying our divZero exception catch\n");
     printf("              Write exceptionsOpCode for trying our opCode exception catch\n");
@@ -68,19 +71,14 @@ void printingMenu()
     printf("                            \n");
 }
 
-void clearScreen()
-{
-    clearWorkSpace();
-}
-
 void help()
 {
     //fixme ascii art somewhere
-    clearScreen();
+    clearWorkSpace();
     printf("        This is a rudimentary kernell, created by 2 ITBA students, passionate for what they do\n");
     printf("                                            and what they study. \n");
     printf("        In this kernell, you will be able to do: \n ");
-    printf("               - See what time is it. \n");
+    printf("                - See what time is it. \n");
     printf("                - Play a game call BlobWars -> It is a strategy game where you can play \n");
     printf("                     against a IA or against a friend, where you got a squared matrix\n");
     printf("                     and the mission is to \"convert\" as much pieces of the enemy you can.\n");

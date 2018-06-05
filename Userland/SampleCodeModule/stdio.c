@@ -3,9 +3,6 @@
 static unsigned int charR = 255;
 static unsigned int charG = 255;
 static unsigned int charB = 255;
-static unsigned int pixelR = 255;
-static unsigned int pixelG = 255;
-static unsigned int pixelB = 255;
 static char buffer[BUFFER_SIZE];
 
 int abs(int a)
@@ -17,9 +14,24 @@ int abs(int a)
     return a;
 }
 
-void putPixel(unsigned int x, unsigned int y)
+void beepSound()
 {
-    systemCall(7, (uint64_t)x, (uint64_t)y, (uint64_t)pixelR, (uint64_t)pixelG, (uint64_t)pixelB);
+    systemCall(3, 0, 0, 0, 0, 0);
+}
+
+void putPixel(unsigned int x, unsigned int y, unsigned char red, unsigned char green, unsigned char blue)
+{
+    systemCall(7, (uint64_t)x, (uint64_t)y, (uint64_t)red, (uint64_t)green, (uint64_t)blue);
+}
+
+void setPixel(unsigned int x, unsigned int y)
+{
+    systemCall(8, (uint64_t)x, (uint64_t)y, 0, 0, 0);
+}
+
+void printPixelBackGroundColor(unsigned int x, unsigned int y)
+{
+    systemCall(9, (uint64_t)x, (uint64_t)y, 0, 0, 0);
 }
 
 void clearWorkSpace()

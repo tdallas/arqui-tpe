@@ -12,11 +12,14 @@
 #define BUFFER_SIZE 128
 #define INT_BUFFER_SIZE 12
 
+void beepSound();
 int abs(int a);
 int getchar();
+void setPixel(unsigned int x, unsigned int y);
+void printPixelBackGroundColor(unsigned int x, unsigned int y);
 void setBackGroundColor(unsigned int red, unsigned int blue, unsigned int green);
 void setCharColor(unsigned int red, unsigned int blue, unsigned int green);
-void putPixel(unsigned int x, unsigned int y);
+void putPixel(unsigned int x, unsigned int y, unsigned char red, unsigned char green, unsigned char blue);
 void putchar(unsigned char c);
 void *malloc(long unsigned int size);
 void free(void *pointer);
