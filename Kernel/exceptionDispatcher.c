@@ -4,7 +4,7 @@
 #define ZERO_EXCEPTION_ID 0
 #define INVALID_OP_CODE_EXCEPTION_ID 6
 
-static const char registers[16][6] = {"RAX: ", "RBX: ", "RCX: ", "RDX: ", "RBP: ",  "RDI: ",  "RSI: ", "R8: ", "R9: ", "R10: ", "R11: ", "R12: ", "R13: ", "R14: ", "R15: "};
+static const char * registers[16] = { "RSP: ", "RAX: ", "RBX: ", "RCX: ", "RDX: ", "RBP: ", "RDI: ", "RSI: ", "R8: ", "R9: ", "R10: ", "R11: ", "R12: ", "R13: ", "R14: ", "R15: "};
 
 static void zero_division(uint64_t *states);
 static void invalid_op_code(uint64_t *states);
@@ -33,13 +33,10 @@ static void invalid_op_code(uint64_t *states)
 void printRegisters(uint64_t *states)
 {
 	newLine();
-	printString("Registers: ", 255, 255, 255);
-	newLine();
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < 16; i++)
 	{
 		printString(registers[i], 255, 255, 255);
 		printDec(states[i]);
 		newLine();
 	}
-	newLine();
 }

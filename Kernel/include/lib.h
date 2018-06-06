@@ -10,7 +10,10 @@ void *malloc(uint64_t lenght);
 //ASM functions
 char *cpuVendor(char *result);
 uint64_t getTimeRTC(uint64_t value);
-void speakerOn(void);
+void speakerOn(uint64_t freq);
 void speakerOff(void);
+void speakerBeep(void);
+void delayLoop(uint64_t times);
+
 
 #endif

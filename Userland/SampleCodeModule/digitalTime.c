@@ -18,6 +18,9 @@ void startDigitalTime()
     int actualTime[7];
     char c;
 
+    clearWorkSpace();
+    printf("Press c to change color or b or ESC to go back.\n");
+    
     printMark();
 
     getAllTimes(lastTime);
@@ -121,10 +124,7 @@ void printSecond(int actualTime[7])
 
 void printMark()
 {
-    clearWorkSpace();
     unsigned int y, x;
-
-    printf("Press c to change color or b or ESC to go back.\n");
 
     for (y = 240; y <= 255; y++)
     {

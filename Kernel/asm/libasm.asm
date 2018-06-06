@@ -3,6 +3,8 @@ GLOBAL getTimeRTC
 GLOBAL getKeyCode
 GLOBAL speakerOn
 GLOBAL speakerOff
+GLOBAL speakerBeep
+GLOBAL delayLoop
 
 SECTION .text
 
@@ -75,7 +77,7 @@ speakerOn:
 
 	mov al, 182
 	out 0x43, al	; System timers..
-	mov ax, 0x0000000000000C80		; Set up frequency
+	mov ax, di		; Set up frequency
 	out 0x42, al
 	mov al, ah		; 64-bit mode.... AH allowed????
 	out 0x42, al
@@ -96,6 +98,40 @@ speakerOff:
 	and al, 0xFC
 	out 0x61, al
 
+	mov rsp, rbp
+  	pop rbp
+	ret
+
+speakerBeep:
+	push rbp
+  	mov rbp, rsp
+
+	mov rdi, 0x0000000000000C80
+	call speakerOn
+
+	mov rdi, 10000000
+	call delayLoop
+
+	call speakerOff
+
+	mov rsp, rbp
+  	pop rbp
+	ret
+
+delayLoop:
+	push rbp
+  	mov rbp, rsp
+	
+	push rax
+	mov rax, 0
+	.delay:
+		inc rax
+		cmp rax, rdi
+		je .fin
+		jmp .delay
+	
+	.fin:
+	pop rax
 	mov rsp, rbp
   	pop rbp
 	ret
