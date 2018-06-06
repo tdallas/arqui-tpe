@@ -7,5 +7,8 @@
 void printTime();
 void printDate();
 void printTimeUTC();
+void help();
+void info();
+void displayTime();
 
 #endif

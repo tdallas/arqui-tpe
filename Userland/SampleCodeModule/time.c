@@ -174,5 +174,6 @@ int getTimeUTC()
 
 void setTimeUTC(int newUTC)
 {
-    UTC = newUTC;
+    if(newUTC>=-12 || newUTC<=12)
+        UTC = newUTC;
 }

@@ -9,9 +9,6 @@
 
 void shell();
 int managingCases(char *option);
-void help();
-void info();
-void displayTime();
 int changeTextColor(char *color);
 int changeBackGroundColor(char *color);
 int wichColor(char *color);
